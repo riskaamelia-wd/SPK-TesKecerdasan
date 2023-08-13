@@ -1,0 +1,9 @@
+:root{
+  --primary : #0099cc;
+  --primary-900: #4682A9;
+  --secondary: #F6F4EB;
+}
+
+body{
+  width: 100%;
+}

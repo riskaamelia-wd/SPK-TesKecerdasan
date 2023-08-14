@@ -11,9 +11,14 @@ import InformasiKecerdasan from './pages/InformasiKecerdasan'
 import TesKecerdasan from './pages/TesKecerdasan'
 import './App.css'
 import HasilTes from './pages/HasilTes'
-import DataSiswa from './pages/DataSiswa'
 import { ApolloProvider } from '@apollo/client';
 import client from './apollo-client';
+import Siswa from './pages/Siswa';
+import MenuAdmin from './pages/MenuAdmin';
+import { DataSiswa } from './pages/DataSiswa';
+import { DataHasil } from './pages/DataHasil';
+import { DataSoal } from './pages/DataSoal';
+import { DataPakar } from './pages/DataPakar';
 
 function App() {
   const [count, setCount] = useState(0)
@@ -28,7 +33,12 @@ function App() {
           <Route path='informasiKecerdasan' element={<InformasiKecerdasan/>}/>
           <Route path='hasilTes' element={<HasilTes/>}/>
           <Route path='tesKecerdasan' element={<TesKecerdasan/>}/>
+          <Route path='siswa' element={<Siswa/>}/>
           <Route path='dataSiswa' element={<DataSiswa/>}/>
+          <Route path='menuAdmin' element={<MenuAdmin/>}/>
+          <Route path='dataHasil' element={<DataHasil/>}/>
+          <Route path='dataSoal' element={<DataSoal/>}/>
+          <Route path='dataPakar' element={<DataPakar/>}/>
         </Routes>
       </BrowserRouter>
     </ApolloProvider>

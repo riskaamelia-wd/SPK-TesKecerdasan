@@ -29,3 +29,16 @@ export const searchSiswa = gql`
         }
     }
 `
+
+export const getTes = gql`
+    query MyQuery2 {
+        tes {
+        id
+        nama
+        nis
+        prodi
+        tglTes
+        tipeKecerdasan
+        }
+    }
+`

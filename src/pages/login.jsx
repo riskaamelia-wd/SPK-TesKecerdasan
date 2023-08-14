@@ -43,15 +43,15 @@ const Login = () => {
 
     return (
         <div className='col-12 d-flex' style={{height:'100vh', backgroundColor:'var(--primary)'}}>
-            <div className='col-6 col-lg-4 m-auto'>
+            <div className='col-6 col-lg-4 m-auto rounded' style={{backgroundColor:'var(--secondary)'}}>
                 <div className='mb-3 col-6 col-lg-4 m-auto'>
                     <img  src={sma} alt="SMA" />
                 </div>
                 <h1 className='text-center mb-4'>LOGIN</h1>
                 <form onSubmit={formik.handleSubmit}>
                 {/* <form> */}
-                    <div className='d-flex'>
-                        <label htmlFor='email' className='me-4 text-white' >Username</label>
+                    <div className='d-flex p-3'>
+                        <label htmlFor='email' className='me-4 ' >Username</label>
                         <input
                             id='email'
                             name='email'
@@ -62,8 +62,8 @@ const Login = () => {
                         />
                         {formik.errors.email ? <div className='text-danger fw-light '>{formik.errors.email}</div> : null}
                     </div>
-                    <div className='mt-3 d-flex'>
-                        <label htmlFor='password' className='me-4 text-white'>Password</label>
+                    <div className='mt-3 d-flex p-3'>
+                        <label htmlFor='password' className='me-4 '>Password</label>
                         <input
                             id='password'
                             name='password'
@@ -74,10 +74,10 @@ const Login = () => {
                         {formik.errors.password ? <div className='text-danger fw-light'>{formik.errors.password}</div> : null}
                     </div>
 
-                <div className='d-flex col-3 mx-auto gap-4 mt-4'>
+                <div className='d-flex col-5 mx-auto  p-3 gap-4 mt-4'>
                     <Button
                         // onClick={navigate('/menuUtama')}
-                        text={'Submit'}
+                        text={'Login'}
                     />
                     <Button
                         text={'Cancel'}

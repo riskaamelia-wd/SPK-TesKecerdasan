@@ -12,12 +12,14 @@ import TesKecerdasan from './pages/TesKecerdasan'
 import './App.css'
 import HasilTes from './pages/HasilTes'
 import DataSiswa from './pages/DataSiswa'
+import { ApolloProvider } from '@apollo/client';
+import client from './apollo-client';
 
 function App() {
   const [count, setCount] = useState(0)
 
   return (
-    <>
+    <ApolloProvider client={client}>
       <BrowserRouter>
         <Routes>
           <Route path='/' element={<Login/>}/>
@@ -29,7 +31,7 @@ function App() {
           <Route path='dataSiswa' element={<DataSiswa/>}/>
         </Routes>
       </BrowserRouter>
-    </>
+    </ApolloProvider>
   )
 }
 

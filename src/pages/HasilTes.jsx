@@ -1,12 +1,15 @@
 import { Link } from "react-router-dom"
 import Cari from "../components/Cari"
 import Button from "../elements/Button"
+import Judul from "../elements/Judul"
 
 const HasilTes = () =>{
     return(
         <div style={{backgroundColor:'var(--primary)', height:'100vh'}}>
         <div>
-            <h2 className="text-white text-center pt-3 mb-3">Hasil Tes</h2>
+            <Judul
+                text={'Hasil Tes'}
+            />
             <div className=" pt-1 pb-1 col-6 col-lg-3 rounded ms-3 ms-lg-5" style={{backgroundColor:'var(--secondary)'}}>
                 <Cari
                     text={'ID'}

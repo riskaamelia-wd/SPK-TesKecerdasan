@@ -42,3 +42,24 @@ export const getTes = gql`
         }
     }
 `
+
+export const getSoal = gql`
+query MyQuery2 {
+    soal {
+      id
+      soal
+      tipeKecerdasan
+    }
+  }
+`
+
+export const getPakar = gql`
+    query MyQuery3 {
+        pakar {
+        telp
+        nama
+        jenKel
+        id
+        }
+    }
+`

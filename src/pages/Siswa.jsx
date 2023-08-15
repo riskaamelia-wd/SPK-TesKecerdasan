@@ -109,7 +109,9 @@ const Siswa = () => {
     return(
         <>
             <div className="row" style={{backgroundColor:'var(--primary)', height:'fit-content'}}>
-                <Judul className={' col-12 text-center ms-4 pt-3 pb-3'} text={'Data Siswa'}/>
+                <Judul 
+                    text={'Data Siswa'}
+                />
                 <form onReset={formik.handleReset} onSubmit={formik.handleSubmit}>
                     <div className="row col-12 mb-4">
                         <div  style={{backgroundColor:'var(--secondary)'}} className="rounded p-3 col-7 col-lg-5 m-auto">

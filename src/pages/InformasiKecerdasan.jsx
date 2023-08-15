@@ -1,11 +1,12 @@
 import { Link } from "react-router-dom"
 import Button from "../elements/Button"
+import Judul from "../elements/Judul"
 
 const InformasiKecerdasan = () => {
     return (
         <div className="col-12" style={{backgroundColor:'var(--primary)'}}>
             <div className="col-10 m-auto p-3">
-                <h2 className="text-white mt-3 mb-4">Informasi Kecerdasan</h2>
+                <Judul text={'Informasi Kecerdasan'}/>
                 <div className="p-2 mb-3 me-5" style={{backgroundColor:'var(--secondary)'}}>
                     <span>Kecerdasan Linguistic Verbal adalah kemampuan individu terkait dengan penggunaan kata-kata secara lisan maupun tulisan untuk mengungkapkan pemikiran yanng dimilikinya.
                     <br />Cara mengembangkan: membaca dengan lantang, bermain peran, dan menulis blog atau jurnal</span>

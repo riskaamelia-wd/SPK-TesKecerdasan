@@ -7,7 +7,6 @@ const Pakar = () => {
     return(
         <div style={{backgroundColor:'var(--primary)', height:'100vh'}}>
             <Judul
-                className={'text-center pt-4 pb-3'}
                 text={'Pakar'}
             />
             <div style={{backgroundColor:'var(--secondary)'}} className="col-6 col-lg-3 ms-lg-5 pt-1 pb-1 ms-4 rounded">

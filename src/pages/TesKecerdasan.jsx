@@ -1,11 +1,14 @@
 import Button from "../elements/Button";
 import CheckBox from "../elements/CheckBox";
+import Judul from "../elements/Judul";
 
 const TesKecerdasan = () => {
     return(
         <div style={{backgroundColor:'var(--primary)'}} className="col-12">
             <div className="container pt-3 col-10 col-lg-6">
-                <h2 className=" mb-4 text-white">Tes Kecerdasan</h2>
+                <Judul
+                    text={'Tes Kecerdasan'}
+                />            
                 <div className="mb-3">
                     <table>
                         <tr>

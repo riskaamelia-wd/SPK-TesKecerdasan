@@ -15,7 +15,7 @@ export const addSiswa = gql`
     }
   `
 
-  export const addPakar = gql`
+export const addPakar = gql`
     mutation MyMutation($object: pakar_insert_input = {}) {
         insert_pakar_one(object: $object) {
         id
@@ -24,4 +24,17 @@ export const addSiswa = gql`
         telp
         }
     }
-  `
+`
+
+export const deletePakar = gql`
+    mutation MyMutation($id: Int) {
+        delete_pakar(where: {id: {_eq: $id}}) {
+        returning {
+            id
+            jenKel
+            nama
+            telp
+        }
+        }
+    }
+`

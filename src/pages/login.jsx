@@ -1,7 +1,6 @@
 import React from 'react';
 import { useFormik } from 'formik';
-import { Link, useNavigate } from "react-router-dom";
-import Input from '../elements/Input';
+import { useNavigate } from "react-router-dom";
 import sma from '../assets/sma.png'
 import Button from '../elements/Button';
 
@@ -74,26 +73,13 @@ const Login = () => {
                         {formik.errors.password ? <div className='text-danger fw-light'>{formik.errors.password}</div> : null}
                     </div>
 
-                <div className='d-flex col-5 mx-auto  p-3 gap-4 mt-4'>
+                <div className='d-flex justify-content-end col-12 p-3 gap-4 mt-4'>
                     <Button
-                        // onClick={navigate('/menuUtama')}
                         text={'Login'}
                     />
                     <Button
                         text={'Cancel'}
                     />
-                    {/* <button 
-                        className="btn btn-secondary d-grid mx-auto mt-5 mb-3"
-                        type="submit"
-                    >
-                        Login
-                    </button>
-                    <button 
-                        type="submit"
-                        className="btn btn-secondary d-grid mx-auto mt-5 mb-3"
-                    >
-                        cancel
-                    </button> */}
                 </div>
                 </form>
             </div>

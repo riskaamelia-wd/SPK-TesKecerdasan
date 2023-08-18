@@ -10,6 +10,7 @@ import { addSiswa } from "../graphql/mutation"
 import { getSiswa } from "../graphql/query"
 import { useFormik } from "formik"
 import { useEffect, useState } from "react"
+import { Navbar } from "../components/Navbar"
 
 const validate = values => {
     const error = {}
@@ -108,6 +109,19 @@ const Siswa = () => {
 
     return(
         <>
+            <Navbar                
+                text1={'Siswa'}
+                text2={'Pakar'}
+                text3={'Informasi Kecerdasan'}
+                text4={'Tes Kecerdasan'}
+                text5={'Hasil Tes'}
+                linkMenu={'/menuUtama'}
+                link1={'/siswa'}
+                link2={'/pakar'}
+                link3={'/informasiKecerdasan'}
+                link4={'/tesKecerdasan'}
+                link5={'/hasilTes'}
+            />
             <div className="row" style={{backgroundColor:'var(--primary)', height:'fit-content'}}>
                 <Judul 
                     text={'Data Siswa'}

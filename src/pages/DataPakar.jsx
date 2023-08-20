@@ -4,16 +4,39 @@ import { useEffect, useState } from "react";
 import { getPakar } from "../graphql/query";
 import Input from "../elements/Input";
 import Button from "../elements/Button";
-import { Link } from "react-router-dom";
 import Cari from "../components/Cari";
 import pencil from '../assets/pensil.svg'
 import trash from '../assets/trash.svg'
 import { addPakar, deletePakar } from "../graphql/mutation";
 import { Navbar } from "../components/Navbar";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
+
+const generatePDF = (data) => {  
+    const doc = new jsPDF();
+    const tableColumn = ["Id", "Nama", "Jenis Kelamin", "Telepon"];
+    const tableRows = [];
+
+    data.forEach(item => {
+        const itemData = [
+            item.id,
+            item.nama,
+            item.jenKel,
+            item.telp
+        ]
+        tableRows.push(itemData)
+    });
+
+    doc.text("Data Pakar", 14, 15)
+    doc.autoTable(tableColumn, tableRows, {startY:20})
+    doc.save('data-pakar.pdf')
+}
 
 export const DataPakar = () => {
     const {data, loading, error} = useQuery(getPakar)
     const [pakar,setPakar] = useState([])
+    const reportData = data?.pakar;
+
     const [dataPakar,setDataPakar] = useState({
         nama : '',
         jenKel: '',
@@ -33,6 +56,7 @@ export const DataPakar = () => {
     const [DELETE_PAKAR] = useMutation(deletePakar,{
         refetchQueries:[getPakar]
     })
+
 
     const handleSubmit = async (e)  => {
         e.preventDefault()
@@ -160,6 +184,7 @@ export const DataPakar = () => {
                                     <Button
                                         text={'Report'}
                                         className={'mt-3'}
+                                        onClick={() => generatePDF(reportData)}
                                         type={'button'}
                                     />
                                 </div>

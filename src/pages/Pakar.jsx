@@ -69,10 +69,6 @@ const Pakar = () => {
                         </tbody>
                     </table>
                 </div>
-
-                <div className="d-flex justify-content-end me-2 me-lg-5">
-                    <Link className="btn btn-primary " to={'/menuUtama'}>Keluar</Link>
-                </div>
             </div>
         </>
     )

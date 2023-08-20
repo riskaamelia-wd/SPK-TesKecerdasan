@@ -3,8 +3,18 @@ import Cari from "../components/Cari"
 import Button from "../elements/Button"
 import Judul from "../elements/Judul"
 import { Navbar } from "../components/Navbar"
+import { useQuery } from "@apollo/client"
+import { getTes } from "../graphql/query"
+import { useEffect, useState } from "react"
 
 const HasilTes = () =>{
+    const {data, loading, error} = useQuery(getTes)
+    const [hasil, setHasil] = useState([])
+    useEffect(() => {
+        if(!loading && !error){
+            setHasil(data?.tes)
+        }
+    },[loading])
     return(
         <>
             <Navbar                
@@ -42,20 +52,24 @@ const HasilTes = () =>{
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>0001</td>
-                                <td>01 januari 1911</td>
-                                <td>John</td>
-                                <td>Linguistik</td>
-                                <td>IPA</td>
-                            </tr>
+                            {
+                                loading?
+                                <tr>
+                                    <td>Loading...</td>
+                                </tr>
+                                :
+                                data?.tes?.map((item)=>
+                                    <tr key={item.id}>
+                                        <td>{item.id}</td>
+                                        <td>{item.tglTes}</td>
+                                        <td>{item.nama}</td>
+                                        <td>{item.tipeKecerdasan}</td>
+                                        <td>{item.prodi}</td>
+                                    </tr>
+                                )
+                            }
                         </tbody>
                     </table>
-                </div>
-                <div className="d-flex justify-content-end">
-                    <Link className="btn btn-primary me-4 me-lg-5" to={'/menuUtama'}>
-                        Keluar
-                    </Link>
                 </div>
             </div>
             </div>

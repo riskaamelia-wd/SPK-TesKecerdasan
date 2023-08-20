@@ -1,20 +1,65 @@
-import { useQuery } from "@apollo/client"
+import { useMutation, useQuery } from "@apollo/client"
 import Cari from "../components/Cari"
 import Judul from "../elements/Judul"
 import { getSiswa } from "../graphql/query"
 import { useEffect, useState } from "react"
 import Button from "../elements/Button"
-import { Link } from "react-router-dom"
+import trash from '../assets/trash.svg'
 import { Navbar } from "../components/Navbar"
+import { deleteSiswa } from "../graphql/mutation"
+import jsPDF from "jspdf";
+import "jspdf-autotable";
+
+const generatePDF = (data) => {  
+    const doc = new jsPDF();
+    const tableColumn = ["Id","NIS", "Nama","Tanggal Lahir","No. HP", "Jenis Kelamin", "Jurusan", "Kelas"];
+    const tableRows = [];
+
+    data.forEach(item => {
+        const itemData = [
+            item.id,
+            item.nis,
+            item.nama,
+            item.tglLahir,
+            item.noHp,
+            item.jenKel,
+            item.jurusan,
+            item.kelas
+        ]
+        tableRows.push(itemData)
+    });
+
+    doc.text("Data Siswa", 14, 15)
+    doc.autoTable(tableColumn, tableRows, {startY:20})
+    doc.save('data-siswa.pdf')
+}
 
 export const DataSiswa = () => {
     const {data, loading, error} = useQuery(getSiswa)
     const [siswa, setSiswa] = useState([])
+    const reportData = data?.siswa;
     useEffect(() => {
         if(!loading && !error){
             setSiswa(data.siswa)
         }
     }, [loading])
+
+    const [DELETE_SISWA] = useMutation(deleteSiswa, {refetchQueries:[{getSiswa}]})
+
+    const handleDelete = async (item) => {
+        console.log(item);
+        try {
+            await DELETE_SISWA({
+                variables: {
+                    id: item
+                }
+            });
+            alert("Item deleted successfully");
+            window.location.reload()
+        } catch (error) {
+            alert("Error deleting item:", error);
+        }
+    }
     return(
         <>
             <Navbar
@@ -48,6 +93,7 @@ export const DataSiswa = () => {
                                 <th>Jenis Kelamin</th>
                                 <th>Jurusan</th>
                                 <th>Kelas</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -62,6 +108,13 @@ export const DataSiswa = () => {
                                         <td>{item.jenKel}</td>
                                         <td>{item.jurusan}</td>
                                         <td>{item.kelas}</td>
+                                        <td>            
+                                            <button className="bg-danger pb-2 m-0 rounded btn"
+                                            onClick={() => {handleDelete(item.id)}}
+                                            >
+                                                <img src={trash} alt="delete"/>
+                                            </button>
+                                        </td>
                                     </tr>
                                 )
                             }
@@ -70,10 +123,7 @@ export const DataSiswa = () => {
                     <div className="d-flex justify-content-end">
                             <Button
                                 text={'Report'}
-                            />
-                            <Button
-                                className={'ms-3'}
-                                text={'Hapus'}
+                                onClick={() => generatePDF(reportData)}
                             />
                     </div>
                 </div>

@@ -1,12 +1,12 @@
 import { Link } from "react-router-dom"
-import Id from "../components/Cari"
+import trash from '../assets/trash.svg'
 import Button from "../elements/Button"
 import Input from "../elements/Input"
 import Judul from "../elements/Judul"
 import Cari from "../components/Cari"
 import { useMutation, useQuery } from "@apollo/client"
 import { useNavigate } from "react-router-dom"
-import { addSiswa } from "../graphql/mutation"
+import { addSiswa, deleteSiswa } from "../graphql/mutation"
 import { getSiswa } from "../graphql/query"
 import { useFormik } from "formik"
 import { useEffect, useState } from "react"
@@ -52,7 +52,6 @@ const Siswa = () => {
 
     const {data, loading, error} = useQuery(getSiswa)
     useEffect(() => {
-        console.log(data);
         if(!loading && !error){
             setSiswa(data.siswa)
         }
@@ -88,7 +87,8 @@ const Siswa = () => {
                         }
                     }
                 })
-                console.log(add);
+                alert('Add Data Successfully')
+                window.location.reload()
             }
         }
     })
@@ -106,6 +106,24 @@ const Siswa = () => {
         {value:'11-3', text:'11-3'},
         {value:'11-4', text:'11-4'},
     ]
+
+    
+    const [DELETE_SISWA] = useMutation(deleteSiswa, {refetchQueries:[{getSiswa}]})
+
+    const handleDelete = async (item) => {
+        console.log(item);
+        try {
+            await DELETE_SISWA({
+                variables: {
+                    id: item
+                }
+            });
+            alert("Item deleted successfully");
+            window.location.reload()
+        } catch (error) {
+            alert("Error deleting item:", error);
+        }
+    }
 
     return(
         <>
@@ -286,13 +304,6 @@ const Siswa = () => {
                                     onClick={ e => formik.resetForm()}
                                     text={'Batal'}
                                 />
-                                <Button
-                                    className={'mb-3'}
-                                    type={'reset'}
-                                    onClick={ e => formik.resetForm()}
-                                    text={'Hapus'}
-                                />
-                                <Link to={'/menuUtama'} className="btn btn-primary mb-3">Keluar</Link>
                             </div>
                         </div>
                     </div>
@@ -316,6 +327,7 @@ const Siswa = () => {
                                 <th>Jenis Kelamin</th>
                                 <th>Jurusan</th>
                                 <th>Kelas</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -326,7 +338,7 @@ const Siswa = () => {
                             //    </tr>
                             //    : 
                             
-                               data?.siswa?.map((item, idx) => 
+                               siswa?.map((item, idx) => 
                                 // <p>{item.nis}</p>
                                     <tr key={idx}>
                                         <td>{item?.id}</td>
@@ -337,6 +349,13 @@ const Siswa = () => {
                                         <td>{item.jenKel}</td>
                                         <td>{item.jurusan}</td>
                                         <td>{item.kelas}</td>
+                                        <td>    
+                                            <button className="bg-danger pb-2 m-0 rounded btn"
+                                            onClick={() => {handleDelete(item.id)}}
+                                            >
+                                                <img src={trash} alt="delete"/>
+                                            </button>
+                                        </td>
                                     </tr>
                                )
                             }

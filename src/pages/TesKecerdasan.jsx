@@ -1,9 +1,38 @@
+import { useQuery } from "@apollo/client";
 import { Navbar } from "../components/Navbar";
 import Button from "../elements/Button";
 import CheckBox from "../elements/CheckBox";
 import Judul from "../elements/Judul";
+import { getSoal } from "../graphql/query";
+import { useEffect, useState } from "react";
 
 const TesKecerdasan = () => {
+    const {data, loading, error} = useQuery(getSoal)
+    const [soal, setSoal] = useState([])
+    const [items, setItems] = useState([])
+    useEffect(() => {
+        if(!loading && !error){
+            setSoal(data?.soal)
+        }
+    }, [loading])
+    // const handleCheckboxChange = (itemId) => {
+    //     // Lakukan perubahan status checkbox di state
+    //     const updatedItems = data?.soal?.map(item => {
+    //       if (item.id === itemId) {
+    //         return { ...item, checked: !item.tipeKecerdasan };
+    //       }
+    //       return item;
+    //     });
+    //     console.log(items);
+    //     setItems(updatedItems);
+    // }
+    const handleCheckboxChange = () => {
+        const item = e.target.name
+        const isChe = e.target.value
+        setItems(prev => ({...items, prev : isChe}))
+      };
+      console.log(items, ' items');
+      
     return(
         <>        
             <Navbar                
@@ -67,7 +96,31 @@ const TesKecerdasan = () => {
                         <label htmlFor="">
                             Silahkan pilih pernyataan yang paling sesuai dengan anda!
                         </label>
-                        <CheckBox
+                        {
+                            loading?
+                            <p>loading...</p>
+                            :
+                            data?.soal?.map((item)=>
+                                <div key={item.id} className={`form-check`}>
+                                    <input 
+                                        className="form-check-input" 
+                                        type="checkbox" 
+                                        // checked
+                                        name={item.tipeKecerdasan}
+                                        value={item.tipeKecerdasan}
+                                        onChange={() => handleCheckboxChange}
+                                        // id={id}
+                                    />
+                                    <label 
+                                        className="form-check-label" 
+                                        // htmlFor={htmlFor}
+                                    >
+                                        {item.soal}
+                                    </label>
+                                </div>
+                            )
+                        }
+                        {/* <CheckBox
                             text={'Saya senang bercerita'}
                             className={''}
                             value={''}
@@ -94,8 +147,8 @@ const TesKecerdasan = () => {
                             value={''}
                             id={''}
                             htmlFor={''}
-                        />
-                        <CheckBox
+                        /> */}
+                        {/* <CheckBox
                             text={'Lebih meyukai Bahasa inggris, ilmu sosial, sejarah daripada matematika dan ilmu alam'}
                             className={''}
                             value={''}
@@ -444,7 +497,7 @@ const TesKecerdasan = () => {
                             value={''}
                             id={''}
                             htmlFor={''}
-                        />
+                        /> */}
                     </div>
                     <div>
                         <Button

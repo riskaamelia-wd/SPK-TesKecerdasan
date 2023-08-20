@@ -6,10 +6,35 @@ import { useQuery } from "@apollo/client"
 import { getTes } from "../graphql/query"
 import { useEffect, useState } from "react"
 import { Navbar } from "../components/Navbar"
+import jsPDF from "jspdf";
+import "jspdf-autotable";
+
+const generatePDF = (data) => {  
+    const doc = new jsPDF();
+    const tableColumn = ["Id","NIS", "Tanggal Tes", "Nama", "Tipe Kecerdasan", "Program Studi"];
+    const tableRows = [];
+
+    data.forEach(item => {
+        const itemData = [
+            item.id,
+            item.nis,
+            item.tglTes,
+            item.nama,
+            item.tipeKecerdasan,
+            item.prodi
+        ]
+        tableRows.push(itemData)
+    });
+
+    doc.text("Data Hasil", 14, 15)
+    doc.autoTable(tableColumn, tableRows, {startY:20})
+    doc.save('data-hasil.pdf')
+}
 
 export const DataHasil = () => {
     const {data, loading, error} = useQuery(getTes)
     const [tes, setTes] = useState([])
+    const reportData = data?.tes
     useEffect(() => {
         if(!loading && !error){
             setTes(data.tes)
@@ -52,7 +77,7 @@ export const DataHasil = () => {
                             {      
                                 loading?
                                 <tr>
-                                    <td className='text-center' colspan='6'>loading....</td>
+                                    <td className='text-center' colSpan='6'>loading....</td>
                                 </tr>                  
                                 :
                                 data?
@@ -77,6 +102,7 @@ export const DataHasil = () => {
                 <div className='d-flex justify-content-end gap-4 me-4 mt-4'>
                     <Button
                         text={'Report'}
+                        onClick={() => generatePDF(reportData)}
                     />
                 </div>
             </div>

@@ -8,7 +8,11 @@ import { getTes } from "../graphql/query"
 import { useEffect, useState } from "react"
 
 const HasilTes = () =>{
-    const {data, loading, error} = useQuery(getTes)
+    // const {data, loading, error} = useQuery(getTes)
+    const [searchText, setSearch] = useState('')
+    const {data, loading, error, refetch} = useQuery(getTes,{
+        variables:{nama: `%${searchText}%`}
+    })
     const [hasil, setHasil] = useState([])
     useEffect(() => {
         if(!loading && !error){
@@ -35,12 +39,21 @@ const HasilTes = () =>{
                 <Judul
                     text={'Hasil Tes'}
                 />
-                <div className=" pt-1 pb-1 col-6 col-lg-3 rounded ms-3 ms-lg-5" style={{backgroundColor:'var(--secondary)'}}>
+                {/* <div className=" pt-1 pb-1 col-6 col-lg-3 rounded ms-3 ms-lg-5" style={{backgroundColor:'var(--secondary)'}}>
                     <Cari
                         text={'ID'}
                     />
-                </div>
-                <div className="col-11 m-auto">
+                </div> */}
+                <div className="col-11 m-auto">                    
+                    <Cari
+                        classNameLabel={'text-white'}
+                        type={'text'}
+                        text={'Nama'}
+                        name={'searchNis'}
+                        htmlFor={'nama'}
+                        value={searchText}
+                        onChange={(e)=>setSearch(e.target.value)}
+                    />
                     <table className="table mt-3">
                         <thead>
                             <tr>
@@ -55,7 +68,7 @@ const HasilTes = () =>{
                             {
                                 loading?
                                 <tr>
-                                    <td>Loading...</td>
+                                    <td className="text-center" colSpan={'5'}>Loading...</td>
                                 </tr>
                                 :
                                 data?.tes?.map((item)=>

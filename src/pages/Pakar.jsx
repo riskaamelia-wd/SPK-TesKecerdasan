@@ -8,7 +8,8 @@ import { getPakar } from "../graphql/query"
 import { useEffect, useState } from "react"
 
 const Pakar = () => {
-    const {data, loading, error} = useQuery(getPakar)
+    const [searchText, setSearch] = useState('')
+    const {data, loading, error} = useQuery(getPakar, {variables:{nama:`%${searchText}%`}})
     const [pakar, setPakar] = useState([])
     useEffect(() => {
         if(!loading && !error){
@@ -30,18 +31,34 @@ const Pakar = () => {
                 link4={'/tesKecerdasan'}
                 link5={'/hasilTes'}
             />
-            <div style={{backgroundColor:'var(--primary)', height:'100vh'}}>
+            <div className="pb-4" style={{backgroundColor:'var(--primary)', height:'fit-content'}}>
                 <Judul
                     text={'Pakar'}
                 />
-                <div style={{backgroundColor:'var(--secondary)'}} className="col-6 col-lg-3 ms-lg-5 pt-1 pb-1 ms-4 rounded">
+                {/* <div style={{backgroundColor:'var(--secondary)'}} className="col-6 col-lg-3 ms-lg-5 pt-1 pb-1 ms-4 rounded">
                     <Cari
+                        classNameLabel={'text-white'}
                         text={'Nama'}
+                        type={'text'}
+                        name={'searchNama'}
+                        htmlFor={'nama'}
+                        value={searchText}
+                        // onClick={handleSeacrh}
+                        onChange={(e)=>setSearch(e.target.value)}
                     />
-                </div>
+                </div> */}
 
                 <div className="mt-3 mb-3 col-11 m-auto">
-                    <table className=" table table-secondary">
+                <Cari
+                        classNameLabel={'text-white'}
+                        text={'Nama'}
+                        type={'text'}
+                        name={'searchNama'}
+                        htmlFor={'nama'}
+                        value={searchText}
+                        onChange={(e)=>setSearch(e.target.value)}
+                    />
+                    <table className=" table table-striped">
                         <thead>
                             <tr>
                                 <th>ID Pakar</th>

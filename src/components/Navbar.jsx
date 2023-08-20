@@ -35,20 +35,11 @@ export const Navbar = ({linkMenu, link1, link2, link3, link4,text1, text2, text3
                             <Link to={'/'} className="nav-link  text-danger">Logout</Link>
                         </li>                     
                         <li className="nav-item">
-                            <Link to={'/menuAdmin'} className="nav-link  text-danger">Admin</Link>
-                        </li>                      
-                        <li className="nav-item">
                             <Link to={'/dataSiswa'} className="nav-link  text-danger">Data Siswa</Link>
-                        </li>                     
+                        </li>                        
                         <li className="nav-item">
-                            <Link to={'/dataPakar'} className="nav-link  text-danger">Data Pakar</Link>
-                        </li>                      
-                        <li className="nav-item">
-                            <Link to={'/dataSoal'} className="nav-link  text-danger">Data Soal</Link>
-                        </li>                     
-                        <li className="nav-item">
-                            <Link to={'/dataHasil'} className="nav-link  text-danger">Data Hasil</Link>
-                        </li>
+                            <Link to={'/siswa'} className="nav-link  text-danger"> Siswa</Link>
+                        </li> 
                     </ul>
                     </div>
                 </div>

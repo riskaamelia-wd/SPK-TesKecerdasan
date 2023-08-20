@@ -32,7 +32,8 @@ const generatePDF = (data) => {
 }
 
 export const DataHasil = () => {
-    const {data, loading, error} = useQuery(getTes)
+    const [searchText, setSearch] = useState('')
+    const {data, loading, error} = useQuery(getTes, {variables:{nama:`%${searchText}%`}})
     const [tes, setTes] = useState([])
     const reportData = data?.tes
     useEffect(() => {
@@ -59,10 +60,15 @@ export const DataHasil = () => {
                 />
                 <div className="col-11 m-auto mt-5">
                     <Cari
-                        text={'ID'}
+                        text={'Nama'}
                         classNameLabel={'text-white'}
+                        type={'text'}
+                        name={'searchNama'}
+                        htmlFor={'nama'}
+                        value={searchText}
+                        onChange={(e)=>setSearch(e.target.value)}
                     />
-                    <table className="table table-striped">
+                    <table className="table table-striped mt-3">
                         <thead>
                             <tr>
                                 <th>ID</th>

@@ -7,7 +7,7 @@ import Cari from "../components/Cari"
 import { useMutation, useQuery } from "@apollo/client"
 import { useNavigate } from "react-router-dom"
 import { addSiswa, deleteSiswa } from "../graphql/mutation"
-import { getSiswa } from "../graphql/query"
+import { getSiswa, searchSiswa } from "../graphql/query"
 import { useFormik } from "formik"
 import { useEffect, useState } from "react"
 import { Navbar } from "../components/Navbar"
@@ -49,8 +49,11 @@ const validate = values => {
 const Siswa = () => {    
     const navigate = useNavigate()
     const [siswa, setSiswa] = useState([])
+    const [searchText, setSearch] = useState('')
 
-    const {data, loading, error} = useQuery(getSiswa)
+    const {data, loading, error, refetch} = useQuery(searchSiswa,{
+        variables:{nis: `%${searchText}%`}
+    })
     useEffect(() => {
         if(!loading && !error){
             setSiswa(data.siswa)
@@ -58,7 +61,7 @@ const Siswa = () => {
     }, [loading])
 
     const [add] = useMutation(addSiswa,{
-        refetchQueries:[{query:getSiswa}]
+        refetchQueries:[{query:searchSiswa}]
     })
 
     const formik = useFormik({
@@ -108,7 +111,7 @@ const Siswa = () => {
     ]
 
     
-    const [DELETE_SISWA] = useMutation(deleteSiswa, {refetchQueries:[{getSiswa}]})
+    const [DELETE_SISWA] = useMutation(deleteSiswa, {refetchQueries:[{searchSiswa}]})
 
     const handleDelete = async (item) => {
         console.log(item);
@@ -125,6 +128,12 @@ const Siswa = () => {
         }
     }
 
+    
+    const handleSeacrh =(e) => {
+        e.preventDefault()
+        refetch({search:searchText})
+    }
+    
     return(
         <>
             <Navbar                
@@ -308,14 +317,30 @@ const Siswa = () => {
                         </div>
                     </div>
                 </form>
-                <div  className="mb-3 mt-2 col-6 ">
-                    <div style={{backgroundColor:'var(--secondary)'}} className="col-lg-5 col-12 m-auto p-1 pe-3 rounded">
+                {/* <div  className="mb-3 mt-2 col-6 ">
+                    <div style={{backgroundColor:'var(--secondary)'}} className="col-lg-5 col-12 m-auto p-1 pe-3 rounded">                        
                         <Cari
+                            type={'text'}
                             text={'NIS'}
+                            name={'searchNis'}
+                            htmlFor={'nis'}
+                            value={searchText}
+                            onClick={handleSeacrh}
+                            onChange={(e)=>setSearch(e.target.value)}
                         />
                     </div>
-                </div>
+                </div> */}
                 <div className="col-11 m-auto mt-3">
+                    <Cari
+                        type={'text'}
+                        classNameLabel={'text-white'}
+                        text={'NIS'}
+                        name={'searchNis'}
+                        htmlFor={'nis'}
+                        value={searchText}
+                        onClick={handleSeacrh}
+                        onChange={(e)=>setSearch(e.target.value)}
+                        />
                     <table className="table table-striped">
                         <thead>
                             <tr>

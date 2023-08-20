@@ -1,7 +1,7 @@
 import { useMutation, useQuery } from "@apollo/client"
 import Cari from "../components/Cari"
 import Judul from "../elements/Judul"
-import { getSiswa } from "../graphql/query"
+import { getSiswa, searchSiswa } from "../graphql/query"
 import { useEffect, useState } from "react"
 import Button from "../elements/Button"
 import trash from '../assets/trash.svg'
@@ -35,7 +35,10 @@ const generatePDF = (data) => {
 }
 
 export const DataSiswa = () => {
-    const {data, loading, error} = useQuery(getSiswa)
+    const [searchText, setSearch] = useState('')
+    const {data, loading, error, refetch} = useQuery(searchSiswa,{
+        variables:{nis: `%${searchText}%`}
+    })
     const [siswa, setSiswa] = useState([])
     const reportData = data?.siswa;
     useEffect(() => {
@@ -60,6 +63,11 @@ export const DataSiswa = () => {
             alert("Error deleting item:", error);
         }
     }
+
+    const handleSeacrh =(e) => {
+        e.preventDefault()
+        refetch({search:searchText})
+    }
     return(
         <>
             <Navbar
@@ -75,12 +83,15 @@ export const DataSiswa = () => {
             />
             <div style={{backgroundColor:'var(--primary)', height:'100vh'}}>
                 <Judul text={'Data Siswa'}/>
-                {/* <div className='col-5 pt-1 pb-1 pe-2 rounded ms-sm-5 col-lg-3' style={{backgroundColor:'var(--secondary)'}}> */}
-                {/* </div> */}
             <div className="col-11 m-auto mt-5">
                     <Cari
                         classNameLabel={'text-white'}
+                        type={'text'}
                         text={'NIS'}
+                        name={'searchNis'}
+                        htmlFor={'nis'}
+                        value={searchText}
+                        onChange={(e)=>setSearch(e.target.value)}
                     />
                     <table className="table table-striped">
                         <thead>

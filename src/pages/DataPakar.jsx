@@ -33,7 +33,8 @@ const generatePDF = (data) => {
 }
 
 export const DataPakar = () => {
-    const {data, loading, error} = useQuery(getPakar)
+    const [searchText, setSearch] = useState('')
+    const {data, loading, error} = useQuery(getPakar, {variables:{nama:`%${searchText}%`}})
     const [pakar,setPakar] = useState([])
     const reportData = data?.pakar;
 
@@ -46,7 +47,6 @@ export const DataPakar = () => {
     useEffect(() => {
         if(!loading && !error){
             setPakar(data.pakar)
-            console.log(data?.pakar)
         }
     }, [loading])
 
@@ -193,7 +193,12 @@ export const DataPakar = () => {
                     </div>                
                     <div style={{backgroundColor:'var(--secondary)', width:'fit-content'}} className="p-1 pe-3 mt-3 mb-4 rounded">
                             <Cari
-                                text={'ID'}
+                                text={'Nama'}
+                                type={'text'}
+                                name={'searchNama'}
+                                htmlFor={'nama'}
+                                value={searchText}
+                                onChange={(e)=>setSearch(e.target.value)}
                             />
                     </div>
                     <table className="table table-striped">

@@ -16,8 +16,8 @@ export const getSiswa = gql`
 `
 
 export const searchSiswa = gql`
-    query MyQuery($namaSearch: String = "") {
-        siswa(where: {_or: {nama: {_ilike: $namaSearch}}}) {
+    query MyQuery($nis: String = "%%") {
+        siswa(where: {_or: {nis: {_ilike: $nis}}}) {
         id
         jenKel
         jurusan
@@ -31,8 +31,8 @@ export const searchSiswa = gql`
 `
 
 export const getTes = gql`
-    query MyQuery2 {
-        tes {
+    query MyQuery2 ($nama: String = "%%") {
+        tes(where: {_or: {nama: {_ilike: $nama}}}) {
         id
         nama
         nis
@@ -54,8 +54,8 @@ query MyQuery2 {
 `
 
 export const getPakar = gql`
-    query MyQuery3 {
-        pakar {
+    query MyQuery3 ($nama: String = "%%") {
+        pakar(where: {_or: {nama: {_ilike: $nama}}}) {
         telp
         nama
         jenKel

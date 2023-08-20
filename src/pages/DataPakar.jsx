@@ -7,7 +7,9 @@ import Button from "../elements/Button";
 import Cari from "../components/Cari";
 import pencil from '../assets/pensil.svg'
 import trash from '../assets/trash.svg'
-import { addPakar, deletePakar } from "../graphql/mutation";
+import check from '../assets/check.svg'
+import x from '../assets/x.svg'
+import { addPakar, deletePakar, editPakar } from "../graphql/mutation";
 import { Navbar } from "../components/Navbar";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
@@ -56,6 +58,9 @@ export const DataPakar = () => {
     const [DELETE_PAKAR] = useMutation(deletePakar,{
         refetchQueries:[getPakar]
     })
+    const [EDIT_PAKAR] = useMutation(editPakar, {
+        refetchQueries:[getPakar]
+    })
 
 
     const handleSubmit = async (e)  => {
@@ -94,6 +99,50 @@ export const DataPakar = () => {
             alert("Error deleting item:", error);
         }
     }
+
+    
+    const [editMode, setEditMode] = useState({
+        nama : '',
+        jenKel: '',
+        telp: '',
+        id:''
+    });
+    
+    const handleEditClick = (id, nama, jenKel, telp) => {
+        setEditMode((prevEditModes) => ({
+          ...prevEditModes,
+           id, nama, jenKel, telp ,
+        }));
+    };
+
+    const handleSaveClick = async (itemId) => {
+        await EDIT_PAKAR({
+            variables:{
+                id:itemId,
+                nama:editMode.nama,
+                jenKel:editMode.jenKel,
+                telp:editMode.telp
+            }
+        })
+        alert('Data Edited Successfully');
+        window.location.reload()
+      };
+    
+      const handleCancelClick = (itemId) => {
+        setEditMode((prevEditMode) => {
+          if (prevEditMode.id === itemId) {
+            return {
+              nama: '',
+              jenKel: '',
+              telp: '',
+              id: '',
+            };
+          }
+          return prevEditMode;
+        });
+      };
+      
+      
 
     return(
         <>
@@ -216,12 +265,79 @@ export const DataPakar = () => {
                                 pakar?.map((item)=> 
                                     <tr key={item.id}>
                                         <td>{item.id}</td>
-                                        <td>{item.nama}</td>
-                                        <td>{item.jenKel}</td>
-                                        <td>{item.telp}</td>
+                                        <td> 
+                                            {editMode && editMode.id === item.id? (
+                                            <input
+                                                type="text"
+                                                value={editMode.nama}
+                                                onChange={(e) =>
+                                                    {setEditMode((prevEditModes) => ({
+                                                    ...prevEditModes,
+                                                    nama: e.target.value,
+                                                    }));}
+                                                }
+                                            />
+                                            ) : (
+                                            item.nama
+                                            )}
+                                        </td>
+                                        <td>
+                                            {editMode && editMode.id === item.id? (
+                                            <select
+                                            id="jenKel"
+                                            className="form-control"
+                                            style={{width:'fit-content'}}
+                                            name="jenKel"
+                                            onChange={(e) => {
+                                                setEditMode((prev) => ({
+                                                    ...prev,
+                                                    jenKel : e.target.value,
+                                                }))
+                                            }}
+                                        >
+                                            <option value={'Laki-Laki'}>Laki-Laki</option>
+                                            <option value={'Perempuan'}>Perempuan</option>
+                                        </select>
+                                            ) : (
+                                            item.jenKel
+                                            )}
+                                        </td>
+                                        <td>
+                                            {editMode && editMode.id === item.id? (
+                                            <input
+                                                type="text"
+                                                value={editMode.telp}
+                                                onChange={(e) =>
+                                                    {setEditMode((prevEditModes) => ({
+                                                    ...prevEditModes,
+                                                    telp: e.target.value,
+                                                    }));}
+                                                }
+                                            />
+                                            ) : (
+                                            item.telp
+                                            )}</td>
                                         <td className="col-lg-1">
+                                            {editMode && editMode.id === item.id ? (
+                                            <>
+                                                <button className="bg-success pb-2 m-0 rounded btn">
+                                                    <img src={check} alt="edit"
+                                                    onClick={() => handleSaveClick(item.id)}
+                                                />
+                                                </button>
+                                                <button 
+                                                    className="bg-danger pb-2 m-0 ms-3 rounded btn"
+                                                    onClick={() => handleCancelClick(item.id)}
+                                                >
+                                                <img src={x} alt="delete"/>
+                                                </button>
+                                            </>
+                                            ) : (
+                                            <>
                                             <button className="bg-success pb-2 m-0 rounded btn">
-                                                <img src={pencil} alt="edit"/>
+                                                <img src={pencil} alt="edit"
+                                                onClick={() => handleEditClick(item.id, item.nama, item.jenKel, item.telp)}
+                                            />
                                             </button>
                                             <button 
                                                 className="bg-danger pb-2 m-0 ms-3 rounded btn"
@@ -230,6 +346,9 @@ export const DataPakar = () => {
                                             >
                                             <img src={trash} alt="delete"/>
                                             </button>
+                                            </>
+                                                                        
+                                            )}
                                         </td>
                                     </tr>
                                 )

@@ -5,7 +5,7 @@ export const Navbar = ({linkMenu, link1, link2, link3, link4,text1, text2, text3
         <>
             <nav className="navbar navbar-expand-lg bg-body-tertiary">
                 <div className="container-fluid">
-                    <a className="navbar-brand" href="#">SiPakarProdi</a>
+                    <Link className="navbar-brand" to={linkMenu}>SiPakarProdi</Link>
                     <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span className="navbar-toggler-icon"></span>
                     </button>
@@ -33,13 +33,7 @@ export const Navbar = ({linkMenu, link1, link2, link3, link4,text1, text2, text3
                         }                        
                         <li className="nav-item">
                             <Link to={'/'} className="nav-link  text-danger">Logout</Link>
-                        </li>                     
-                        <li className="nav-item">
-                            <Link to={'/dataSiswa'} className="nav-link  text-danger">Data Siswa</Link>
-                        </li>                        
-                        <li className="nav-item">
-                            <Link to={'/siswa'} className="nav-link  text-danger"> Siswa</Link>
-                        </li> 
+                        </li>  
                     </ul>
                     </div>
                 </div>

@@ -14,18 +14,15 @@ import HasilTes from './pages/HasilTes'
 import { ApolloProvider } from '@apollo/client';
 import client from './apollo-client';
 import Siswa from './pages/Siswa';
-import MenuAdmin from './pages/MenuAdmin';
 import { DataSiswa } from './pages/DataSiswa';
 import { DataHasil } from './pages/DataHasil';
 import { DataSoal } from './pages/DataSoal';
 import { DataPakar } from './pages/DataPakar';
-import { Navbar } from './components/Navbar';
 import { MenuUtama2 } from './pages/MenuUtama2';
 import { MenuAdmin2 } from './pages/MenuAdmin2';
 import { TiperKecerdasan } from './pages/TipeKecerdasan';
 
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
     <ApolloProvider client={client}>

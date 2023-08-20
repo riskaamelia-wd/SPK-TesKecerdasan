@@ -13,12 +13,9 @@ const validate = values => {
         errors.password = 'Your password must be at least 8 characters';
     }
 
-    if (!values.email) {
-        errors.email = 'Required';
-    } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
-        errors.email = 'Invalid email address';
-    }
-
+    if (!values.username) {
+        errors.username = 'Required';
+    } 
     return errors;
 };
 
@@ -26,15 +23,18 @@ const Login = () => {
     const navigate = useNavigate()
     const formik = useFormik({
         initialValues: {
-        email: '',
+        username: '',
         password: '',
         },
         
         validate,
         onSubmit: values => {
-            if(values.email !== "" && values.email !== ""){
+            if(values.username == "admin" && values.password == "admin123"){
                 // alert(JSON.stringify(values, null, 2));
                 // console.log(email);
+                navigate('/menuAdmin', {replace:true})
+            }else{
+                
                 navigate('/menuUtama', {replace:true})
             }
         },
@@ -50,10 +50,10 @@ const Login = () => {
                 <form onSubmit={formik.handleSubmit}>
                 {/* <form> */}
                     <div className='d-flex p-3'>
-                        <label htmlFor='email' className='me-4 ' >Username</label>
+                        <label htmlFor='username' className='me-4 ' >Username</label>
                         <input
-                            id='email'
-                            name='email'
+                            id='username'
+                            name='username'
                             type='text'
                             className='form-control'
                             onChange={formik.handleChange}
@@ -76,9 +76,11 @@ const Login = () => {
                 <div className='d-flex justify-content-end col-12 p-3 gap-4 mt-4'>
                     <Button
                         text={'Login'}
+                        type={'submit'}
                     />
                     <Button
                         text={'Cancel'}
+                        type={'button'}
                     />
                 </div>
                 </form>

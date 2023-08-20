@@ -1,38 +1,135 @@
-import { useQuery } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { Navbar } from "../components/Navbar";
 import Button from "../elements/Button";
 import CheckBox from "../elements/CheckBox";
 import Judul from "../elements/Judul";
-import { getSoal } from "../graphql/query";
+import { getSiswa, getSoal, getTes, searchSiswa } from "../graphql/query";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { addTes } from "../graphql/mutation";
 
-const TesKecerdasan = () => {
+const TesKecerdasan = () => {    
+    const navigate = useNavigate()
     const {data, loading, error} = useQuery(getSoal)
+    const {data:dataSiswa , loading:loadingSiswa, error:errorSiswa} = useQuery(searchSiswa)
     const [soal, setSoal] = useState([])
+    const [siswa, setSiswa] = useState([])
+    const [selectedIntelligences, setSelectedIntelligences] = useState({});
     const [items, setItems] = useState([])
+    const [tes, setTes] = useState({
+        nama:'',
+        nis:"",
+        tglTes:'',
+        tipeKecerdasan:''
+    })
     useEffect(() => {
         if(!loading && !error){
             setSoal(data?.soal)
         }
-    }, [loading])
-    // const handleCheckboxChange = (itemId) => {
-    //     // Lakukan perubahan status checkbox di state
-    //     const updatedItems = data?.soal?.map(item => {
-    //       if (item.id === itemId) {
-    //         return { ...item, checked: !item.tipeKecerdasan };
-    //       }
-    //       return item;
-    //     });
-    //     console.log(items);
-    //     setItems(updatedItems);
-    // }
-    const handleCheckboxChange = () => {
-        const item = e.target.name
-        const isChe = e.target.value
-        setItems(prev => ({...items, prev : isChe}))
-      };
-      console.log(items, ' items');
-      
+        if(!loadingSiswa && !errorSiswa){
+            setSiswa(dataSiswa?.siswa)
+        }
+        
+    }, [loading, loadingSiswa])
+
+    const [kinestetik, setKinestetik] = useState({})    
+    const [linguistik, setLinguistik] = useState({})
+    const [logis, setLogis] = useState({})
+    const [spasial, setSpasial] = useState({})
+    const [ritmik, setRitmik] = useState({})
+    const [interpersonal, setInterpersonal] = useState({})
+    const [intrapersonal, setIntrapersonal] = useState({})
+    const [naturalis, setNaturalis] = useState({})
+    const [eksistensial, setEksistensial] = useState({})
+
+    const handleCheckboxChange = ({tipe, itemName, isChecked}) => {
+        
+        if (tipe=='Kinestetik'){
+            setKinestetik((prev)=>({...prev,[itemName]:isChecked}))
+        }else if (tipe =="Linguistic Verbal"){
+            setLinguistik((prev)=>({...prev,[itemName]:isChecked}))
+        }else if (tipe =="Logis Matematis"){
+            setLogis((prev)=>({...prev,[itemName]:isChecked}))
+        }else if (tipe =="Spasial Visual"){
+            setSpasial((prev)=>({...prev,[itemName]:isChecked}))
+        }else if (tipe =="Ritmik Musikal"){
+            setRitmik((prev)=>({...prev,[itemName]:isChecked}))
+        }else if (tipe =="Interpersonal"){
+            setInterpersonal((prev)=>({...prev,[itemName]:isChecked}))
+        }else if (tipe =="Intrapersonal"){
+            setIntrapersonal((prev)=>({...prev,[itemName]:isChecked}))
+        }else if (tipe =="Naturalis"){
+            setNaturalis((prev)=>({...prev,[itemName]:isChecked}))
+        }else if (tipe =="Eksistensial"){
+            setEksistensial((prev)=>({...prev,[itemName]:isChecked}))
+        }
+        const categoryCounts = {
+            Kinestetik: Object.keys(kinestetik).filter(key => kinestetik[key]).length,
+            "Linguistic Verbal": Object.keys(linguistik).filter(key => linguistik[key]).length,
+            "Logis Matematis": Object.keys(logis).filter(key => logis[key]).length,
+            "Spasial Visual": Object.keys(spasial).filter(key => spasial[key]).length,
+            "Ritmik Musikal": Object.keys(ritmik).filter(key => ritmik[key]).length,
+            Interpersonal: Object.keys(interpersonal).filter(key => interpersonal[key]).length,
+            Intrapersonal: Object.keys(intrapersonal).filter(key => intrapersonal[key]).length,
+            Naturalis: Object.keys(naturalis).filter(key => naturalis[key]).length,
+            Eksistensial: Object.keys(eksistensial).filter(key => eksistensial[key]).length
+        };
+    
+        let maxCategory = "";
+        let maxCount = 0;
+    
+        Object.entries(categoryCounts).forEach(([category, count]) => {
+            if (count > maxCount) {
+                maxCount = count;
+                maxCategory = category;
+            }
+        });
+        setTes((prev) => ({
+            ...prev,
+            tipeKecerdasan : maxCategory
+        }))
+        
+    };
+
+    const nisList = [
+        {value:'----', text:'--Choose NIS--'},
+        ...Object.keys(siswa)?.map((key) => ({
+            value: siswa[key]?.nis,
+            text: siswa[key].nis,
+            nama:siswa[key].nama
+          })) 
+    ];
+    const [ADD_TES] = useMutation(addTes, {
+        refetchQueries:[getTes]
+    })
+    console.log(tes);
+    const handleSubmit = async (e) => {
+        e.preventDefault()
+        if(nis !== '' && nama !== '' && tglTes !== '' ){
+            await ADD_TES({
+                variables:{
+                    object:{
+                        nis:tes.nis,
+                        nama:tes.nama,
+                        tglTes:tes.tglTes,
+                        tipeKecerdasan:tes.tipeKecerdasan
+                    }
+                }
+            })
+            navigate(
+             '/tipeKecerdasan',{
+                 state:{
+                     tipeKecerdasan : tes.tipeKecerdasan,
+                     nis:tes.nis,
+                     nama:tes.nama,
+                     tglTes:tes.tglTes
+                 }
+             }
+            )
+        }
+    };
+    
+    
     return(
         <>        
             <Navbar                
@@ -49,463 +146,133 @@ const TesKecerdasan = () => {
                 link5={'/hasilTes'}
             />
             <div style={{backgroundColor:'var(--primary)'}} className="col-12">
-                <div className="container pt-3 col-10 col-lg-6">
-                    <Judul
-                        text={'Tes Kecerdasan'}
-                    />            
-                    <div className="mb-3">
-                        <table>
-                            <tr>
-                                <td><label className="text-white" htmlFor="">ID Siswa</label></td>
-                                <td></td>
-                                <td>
-                                    <input 
-                                    className="ms-3 form-control mb-2" 
-                                    type="text" 
-                                    name="idSiswa" 
-                                    id="idSiswa" />
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><label className="text-white" htmlFor="">Nama</label></td>
-                                <td></td>
-                                <td>
-                                    <input 
-                                    className="ms-3 form-control mb-2" 
-                                    type="text" 
-                                    name="nama" 
-                                    id="nama" />
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><label className="text-white" htmlFor="">Tanggal Tes</label></td>
-                                <td></td>
-                                <td>
-                                    <input 
-                                    className="ms-3 form-control" 
-                                    type="date" 
-                                    name="tgl" 
-                                    id="tgl" />
-                                </td>
-                            </tr>
-                        </table>
-
-                    </div>
-
-                    <div className="p-2" style={{backgroundColor:'var(--secondary)'}}>
-                        <label htmlFor="">
-                            Silahkan pilih pernyataan yang paling sesuai dengan anda!
-                        </label>
-                        {
-                            loading?
-                            <p>loading...</p>
-                            :
-                            data?.soal?.map((item)=>
-                                <div key={item.id} className={`form-check`}>
-                                    <input 
-                                        className="form-check-input" 
-                                        type="checkbox" 
-                                        // checked
-                                        name={item.tipeKecerdasan}
-                                        value={item.tipeKecerdasan}
-                                        onChange={() => handleCheckboxChange}
-                                        // id={id}
-                                    />
-                                    <label 
-                                        className="form-check-label" 
-                                        // htmlFor={htmlFor}
+                <form onSubmit={handleSubmit}>
+                    <div className="container pt-3 col-10 col-lg-6">
+                        <Judul
+                            text={'Tes Kecerdasan'}
+                        />            
+                        <div className="mb-3">
+                            <table>
+                                <tr>
+                                    <td><label className="text-white" htmlFor="">NIS</label></td>
+                                    <td></td>
+                                    <td>
+                                        {/* <input 
+                                        className="ms-3 form-control mb-2" 
+                                        type="text" 
+                                        name="nis" 
+                                        id="nis" 
+                                        onChange={(e) => {
+                                            setTes((prev) => ({
+                                                ...prev,
+                                                nis : e.target.value,
+                                            }))
+                                        }}
+                                        value={tes.nis}
+                                    /> */}
+                                    <select 
+                                        id={'nis'}  
+                                        className={'form-control ms-3 mb-2 '}
+                                        name={'nis'} 
+                                        onChange={(e) => {
+                                            const selectedNis = e.target.value;
+                                            const selectedNama = nisList.find(option => option.value === selectedNis)?.nama || '';
+                                            
+                                            setTes((prev) => ({
+                                                ...prev,
+                                                nis: selectedNis,
+                                                nama: selectedNama,
+                                            }));
+                                          }}
                                     >
-                                        {item.soal}
-                                    </label>
-                                </div>
-                            )
-                        }
-                        {/* <CheckBox
-                            text={'Saya senang bercerita'}
-                            className={''}
-                            value={''}
-                            id={''}
-                            htmlFor={''}
-                        />
-                        <CheckBox
-                            text={'Memiliki ingatan yang baik'}
-                            className={''}
-                            value={''}
-                            id={''}
-                            htmlFor={''}
-                        />
-                        <CheckBox
-                            text={'Menyukai permainan kata'}
-                            className={''}
-                            value={''}
-                            id={''}
-                            htmlFor={''}
-                        />
-                        <CheckBox
-                            text={'Senang membaca buku'}
-                            className={''}
-                            value={''}
-                            id={''}
-                            htmlFor={''}
-                        /> */}
-                        {/* <CheckBox
-                            text={'Lebih meyukai Bahasa inggris, ilmu sosial, sejarah daripada matematika dan ilmu alam'}
-                            className={''}
-                            value={''}
-                            id={''}
-                            htmlFor={''}
-                        />
-                        <CheckBox
-                            text={'senang menulis segala hal yang berbentuk tulisan'}
-                            className={''}
-                            value={''}
-                            id={''}
-                            htmlFor={''}
-                        />
-                        <CheckBox
-                            text={'Sangat menyukai pelajaran matematika'}
-                            className={''}
-                            value={''}
-                            id={''}
-                            htmlFor={''}
-                        />
-                        <CheckBox
-                            text={'Menyukai permainan yang menggunakan logika, seperti teka-teki angka'}
-                            className={''}
-                            value={''}
-                            id={''}
-                            htmlFor={''}
-                        />
-                        <CheckBox
-                            text={'Senang mencari tahu bagaimana cara kerja setiap benda'}
-                            className={''}
-                            value={''}
-                            id={''}
-                            htmlFor={''}
-                        />
-                        <CheckBox
-                            text={'Senang menonton film atau membaca buku detektif'}
-                            className={''}
-                            value={''}
-                            id={''}
-                            htmlFor={''}
-                        />
-                        <CheckBox
-                            text={'Senang membuat eksperimen sederhana'}
-                            className={''}
-                            value={''}
-                            id={''}
-                            htmlFor={''}
-                        />
-                        <CheckBox
-                            text={'Menyenangkan bagi saya bekerja dengan angka dan data'}
-                            className={''}
-                            value={''}
-                            id={''}
-                            htmlFor={''}
-                        />
-                        <CheckBox
-                            text={'Lebih memilih peta daripada petunjuk tertulis'}
-                            className={''}
-                            value={''}
-                            id={''}
-                            htmlFor={''}
-                        />
-                        <CheckBox
-                            text={'Hobi dalam bidang fotografi'}
-                            className={''}
-                            value={''}
-                            id={''}
-                            htmlFor={''}
-                        />
-                        <CheckBox
-                            text={'Saya menikmati menggambar, melukis, dan mencoret-coret '}
-                            className={''}
-                            value={''}
-                            id={''}
-                            htmlFor={''}
-                        />
-                        <CheckBox
-                            text={'Menyukai pelajaran geografi dan seni rupa daripada matematika'}
-                            className={''}
-                            value={''}
-                            id={''}
-                            htmlFor={''}
-                        />
-                        <CheckBox
-                            text={'Lebih mudah belajar dengan gambar daripada dengan teks'}
-                            className={''}
-                            value={''}
-                            id={''}
-                            htmlFor={''}
-                        />
-                        <CheckBox
-                            text={'Menikmati membaca lebih banyak ketika buku memiliki banyak gambar'}
-                            className={''}
-                            value={''}
-                            id={''}
-                            htmlFor={''}
-                        />
-                        <CheckBox
-                            text={'Senang mendengarkan musik dan radio '}
-                            className={''}
-                            value={''}
-                            id={''}
-                            htmlFor={''}
-                        />
-                        <CheckBox
-                            text={'Cenderung bersenandung ketika sedang beraktivitas'}
-                            className={''}
-                            value={''}
-                            id={''}
-                            htmlFor={''}
-                        />                
-                        <CheckBox
-                            text={'Bisa memainkan alat musik '}
-                            className={''}
-                            value={''}
-                            id={''}
-                            htmlFor={''}
-                        />
-                        <CheckBox
-                            text={'Mudah mengingat musik dan liriknya'}
-                            className={''}
-                            value={''}
-                            id={''}
-                            htmlFor={''}
-                        />
-                        <CheckBox
-                            text={'Suka mengarang lagu dan melodi saya sendiri'}
-                            className={''}
-                            value={''}
-                            id={''}
-                            htmlFor={''}
-                        />
-                        <CheckBox
-                            text={'Tahu kapan nada tidak tepat'}
-                            className={''}
-                            value={''}
-                            id={''}
-                            htmlFor={''}
-                        />
-                        <CheckBox
-                            text={'Olahraga merupakan suatu hobi'}
-                            className={''}
-                            value={''}
-                            id={''}
-                            htmlFor={''}
-                        />                
-                        <CheckBox
-                            text={'Tidak dapat duduk diam dalam waktu lama '}
-                            className={''}
-                            value={''}
-                            id={''}
-                            htmlFor={''}
-                        />
-                        <CheckBox
-                            text={'Selalu menggunakan gerak tubuh atau bahasa tubuh ketika berbicara'}
-                            className={''}
-                            value={''}
-                            id={''}
-                            htmlFor={''}
-                        />
-                        <CheckBox
-                            text={'Menikmati kegiatan yang menantang bahaya '}
-                            className={''}
-                            value={''}
-                            id={''}
-                            htmlFor={''}
-                        />
-                        <CheckBox
-                            text={'Suka pekerjaan yang melibatkan keterampilan tangan '}
-                            className={''}
-                            value={''}
-                            id={''}
-                            htmlFor={''}
-                        />
-                        <CheckBox
-                            text={'Lebih suka aktivitas olahraga individu, seperti berenang, golf, atau balet'}
-                            className={''}
-                            value={''}
-                            id={''}
-                            htmlFor={''}
-                        />                
-                        <CheckBox
-                            text={'Senang berkumpul dan berorganisasi'}
-                            className={''}
-                            value={''}
-                            id={''}
-                            htmlFor={''}
-                        />
-                        <CheckBox
-                            text={'Mempunyai beberapa teman dekat'}
-                            className={''}
-                            value={''}
-                            id={''}
-                            htmlFor={''}
-                        />
-                        <CheckBox
-                            text={'Senang terlibat dalam kegiatan sosial'}
-                            className={''}
-                            value={''}
-                            id={''}
-                            htmlFor={''}
-                        />
-                        <CheckBox
-                            text={'Senang mengajak orang lain untuk bekerja sama'}
-                            className={''}
-                            value={''}
-                            id={''}
-                            htmlFor={''}
-                        />
-                        <CheckBox
-                            text={'Sering ditunjuk sebagai pemimpin'}
-                            className={''}
-                            value={''}
-                            id={''}
-                            htmlFor={''}
-                        />                
-                        <CheckBox
-                            text={'Nyaman ditengah keramaian'}
-                            className={''}
-                            value={''}
-                            id={''}
-                            htmlFor={''}
-                        />
-                        <CheckBox
-                            text={'Suka mengerjakan sesuatu sendirian tanpa ada gangguan orang lain'}
-                            className={''}
-                            value={''}
-                            id={''}
-                            htmlFor={''}
-                        />
-                        <CheckBox
-                            text={'Memiliki buku harian atau catatan pribadi'}
-                            className={''}
-                            value={''}
-                            id={''}
-                            htmlFor={''}
-                        />
-                        <CheckBox
-                            text={'Tidak suka keramaian'}
-                            className={''}
-                            value={''}
-                            id={''}
-                            htmlFor={''}
-                        />
-                        <CheckBox
-                            text={'Lebih memilih menghabiskan liburan sendirian daripada bersama teman'}
-                            className={''}
-                            value={''}
-                            id={''}
-                            htmlFor={''}
-                        />                
-                        <CheckBox
-                            text={'Terkadang berbicara pada diri sendiri'}
-                            className={''}
-                            value={''}
-                            id={''}
-                            htmlFor={''}
-                        />
-                        <CheckBox
-                            text={'Suka memikirkan banyak hal sebelum mengambil tindakan apapun'}
-                            className={''}
-                            value={''}
-                            id={''}
-                            htmlFor={''}
-                        />
-                        <CheckBox
-                            text={'Senang berkebun'}
-                            className={''}
-                            value={''}
-                            id={''}
-                            htmlFor={''}
-                        />
-                        <CheckBox
-                            text={'Mempunyai minat cukup besar pada alam, ekologi, tanaman atau binatang'}
-                            className={''}
-                            value={''}
-                            id={''}
-                            htmlFor={''}
-                        />
-                        <CheckBox
-                            text={'Mempunyai hewan peliharaan setidaknya dua jenis hewan'}
-                            className={''}
-                            value={''}
-                            id={''}
-                            htmlFor={''}
-                        />                
-                        <CheckBox
-                            text={'Suka berkelana, hiking, atau sekedar jalan-jalan di alam terbuka'}
-                            className={''}
-                            value={''}
-                            id={''}
-                            htmlFor={''}
-                        />
-                        <CheckBox
-                            text={'Sangat menyenangkan mengamati kebiasaan hewan dan mempelajarinya'}
-                            className={''}
-                            value={''}
-                            id={''}
-                            htmlFor={''}
-                        />
-                        <CheckBox
-                            text={'Sangat pandai menjaga tanaman tetap hidup dan sehat'}
-                            className={''}
-                            value={''}
-                            id={''}
-                            htmlFor={''}
-                        />
-                        <CheckBox
-                            text={'Menyukai pembahasan tentang kehidupan'}
-                            className={''}
-                            value={''}
-                            id={''}
-                            htmlFor={''}
-                        />
-                        <CheckBox
-                            text={'Agama adalah hal yang penting'}
-                            className={''}
-                            value={''}
-                            id={''}
-                            htmlFor={''}
-                        />
-                        <CheckBox
-                            text={'Suka mengunjungi situs alam'}
-                            className={''}
-                            value={''}
-                            id={''}
-                            htmlFor={''}
-                        />
-                        <CheckBox
-                            text={'Menikmati membaca filsuf kuno dan modern'}
-                            className={''}
-                            value={''}
-                            id={''}
-                            htmlFor={''}
-                        />
-                        <CheckBox
-                            text={'Hobi membaca buku sejarah'}
-                            className={''}
-                            value={''}
-                            id={''}
-                            htmlFor={''}
-                        />
-                        <CheckBox
-                            text={'Mempunyai minat cukup besar dalam mempelajari sejarah'}
-                            className={''}
-                            value={''}
-                            id={''}
-                            htmlFor={''}
-                        /> */}
+                                        {
+                                            nisList?.map(option => (
+                                                <option 
+                                                key={option.value}
+                                                value={option.value}
+                                                >
+                                                    {option.text}
+                                                </option>
+                                            ))
+                                        }
+                                    </select>                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><label className="text-white" htmlFor="">Nama</label></td>
+                                    <td></td>
+                                    <td>
+                                        <input 
+                                        className="ms-3 form-control mb-2" 
+                                        type="text" 
+                                        name="nama" 
+                                        id="nama"
+                                        value={tes.nama}
+                                    />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><label className="text-white" htmlFor="">Tanggal Tes</label></td>
+                                    <td></td>
+                                    <td>
+                                        <input 
+                                        className="ms-3 form-control" 
+                                        type="date" 
+                                        name="tglTes" 
+                                        id="tglTes" 
+                                        onChange={(e) => {
+                                            setTes((prev) => ({
+                                                ...prev,
+                                                tglTes : e.target.value,
+                                            }))
+                                        }}
+                                        value={tes.tglTes}
+                                    />
+                                    </td>
+                                </tr>
+                            </table>
+
+                        </div>
+
+                        <div className="p-2" style={{backgroundColor:'var(--secondary)'}}>
+                            <label htmlFor="">
+                                Silahkan pilih pernyataan yang paling sesuai dengan anda!
+                            </label>
+                            {
+                                loading?
+                                <p>loading...</p>
+                                :
+                                data?.soal?.map((item)=>
+                                    <div key={item.id} className={`form-check`}>
+                                        <input 
+                                            className="form-check-input" 
+                                            type="checkbox" 
+                                            checked={kinestetik[item.soal]}
+                                            name={item.soal}
+                                            value={tes.tipeKecerdasan}
+                                            onChange={(e)=>handleCheckboxChange({
+                                                tipe :item.tipeKecerdasan, 
+                                                itemName : item.soal,
+                                                isChecked: e.target.checked})}
+                                        />
+                                        <label 
+                                            className="form-check-label" 
+                                            htmlFor={item.soal}
+                                        >
+                                            {item.soal}
+                                        </label>
+                                    </div>
+                                )
+                            }
+                        </div>
+                        <div>
+                            <Button
+                                className={'ms-2 mb-3 mt-3'}
+                                text={'Selesai'}
+                                type={'submit'}
+                            />
+                        </div>
                     </div>
-                    <div>
-                        <Button
-                            className={'ms-2 mb-3 mt-3'}
-                            text={'Selesai'}
-                        />
-                    </div>
-                </div>
+                </form>
             </div>
         </>
     )

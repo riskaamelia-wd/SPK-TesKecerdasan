@@ -22,6 +22,7 @@ import { DataPakar } from './pages/DataPakar';
 import { Navbar } from './components/Navbar';
 import { MenuUtama2 } from './pages/MenuUtama2';
 import { MenuAdmin2 } from './pages/MenuAdmin2';
+import { TiperKecerdasan } from './pages/TipeKecerdasan';
 
 function App() {
   const [count, setCount] = useState(0)
@@ -43,6 +44,7 @@ function App() {
           <Route path='dataHasil' element={<DataHasil/>}/>
           <Route path='dataSoal' element={<DataSoal/>}/>
           <Route path='dataPakar' element={<DataPakar/>}/>
+          <Route path='tipeKecerdasan' element={<TiperKecerdasan/>}/>
         </Routes>
       </BrowserRouter>
     </ApolloProvider>

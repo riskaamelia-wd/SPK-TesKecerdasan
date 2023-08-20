@@ -31,16 +31,18 @@ export const searchSiswa = gql`
 `
 
 export const getTes = gql`
-    query MyQuery2 ($nama: String = "%%") {
-        tes(where: {_or: {nama: {_ilike: $nama}}}) {
-        id
-        nama
-        nis
-        prodi
-        tglTes
-        tipeKecerdasan
+    query MyQuery($nama: String = "%%") {
+        tes(where: {nama: {_ilike: $nama}}) {
+          siswa {
+            jurusan
+          }
+          nis
+          nama
+          id
+          tglTes
+          tipeKecerdasan
         }
-    }
+      }
 `
 
 export const getSoal = gql`

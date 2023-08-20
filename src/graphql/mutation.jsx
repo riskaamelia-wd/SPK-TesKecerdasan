@@ -83,3 +83,18 @@ export const deleteSoal = gql`
       }
       
 `
+
+export const addTes = gql`
+   mutation MyMutation($object: tes_insert_input = {}) {
+        insert_tes_one(object: $object) {
+          id
+          nama
+          nis
+          tglTes
+          tipeKecerdasan
+          siswa {
+            jurusan
+          }
+        }
+      }
+`

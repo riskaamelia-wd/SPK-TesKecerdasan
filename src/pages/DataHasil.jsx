@@ -94,7 +94,7 @@ export const DataHasil = () => {
                                         <td>{item?.nama}</td>
                                         <td>{item.tglTes}</td>
                                         <td>{item.tipeKecerdasan}</td>
-                                        <td>{item.prodi}</td>
+                                        <td>{item.siswa.jurusan}</td>
                                     </tr>
                                 )
                                 :

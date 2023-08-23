@@ -60,17 +60,11 @@ const InformasiKecerdasan = () => {
                         <div className="p-2 mb-3" style={{backgroundColor:'var(--secondary)'}}>
                             <span>Kecerdasan Eksistensial adalah kemampuan seseorang untuk menjawab dan menemukan solusi dari persoalan-persoalan terdalam mengenai keberadaan atau eksistensi makhluk hidup.<br />Cara mengembangkan: membaca buku filosofi, dan berdiskusi dengan orang lain yang memiliki minat yang sama.</span>
                         </div>
-                    </div>
-                    
-
-                
-                    <div className="d-flex justify-content-end mt-4">
-                        <Link className="me-4 btn btn-primary" to={'/tesKecerdasan'}>
-                            Mulai Tes
-                        </Link>
-                        <Link className="btn btn-primary" to={'/menuUtama'}>
-                            Keluar
-                        </Link>
+                        <div className="d-flex justify-content-end mt-5">
+                            <Link className="me-4 btn btn-primary" to={'/tesKecerdasan'}>
+                                Mulai Tes
+                            </Link>
+                        </div>
                     </div>
                 </div>
             </div>

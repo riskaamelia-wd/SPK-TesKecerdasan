@@ -28,6 +28,9 @@ const generatePDF = (data) => {
 
     doc.text("Data Hasil", 14, 15)
     doc.autoTable(tableColumn, tableRows, {startY:20})
+    let currentDate = new Date();
+    let dateString = currentDate.toLocaleString();
+    doc.text(dateString, 140, 15);
     doc.save('data-hasil.pdf')
 }
 
@@ -94,7 +97,7 @@ export const DataHasil = () => {
                                         <td>{item?.nama}</td>
                                         <td>{item.tglTes}</td>
                                         <td>{item.tipeKecerdasan}</td>
-                                        <td>{item.siswa.jurusan}</td>
+                                        <td>{item.prodi}</td>
                                     </tr>
                                 )
                                 :

@@ -3,6 +3,7 @@ import { useFormik } from 'formik';
 import { useNavigate } from "react-router-dom";
 import sma from '../assets/sma.png'
 import Button from '../elements/Button';
+import bg from '../assets/bg.jpeg'
 
 const validate = values => {
     const errors = {};
@@ -41,7 +42,7 @@ const Login = () => {
     });
 
     return (
-        <div className='col-12 d-flex' style={{height:'100vh', backgroundColor:'var(--primary)'}}>
+        <div className='col-12 d-flex' style={{height:'100vh',  backgroundImage:`url(${bg})`}}>
             <div className='col-6 col-lg-4 m-auto rounded' style={{backgroundColor:'var(--secondary)'}}>
                 <div className='mb-3 col-6 col-lg-4 m-auto'>
                     <img  src={sma} alt="SMA" />

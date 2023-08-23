@@ -3,15 +3,20 @@ import { Navbar } from "../components/Navbar";
 import Button from "../elements/Button";
 import CheckBox from "../elements/CheckBox";
 import Judul from "../elements/Judul";
-import { getSiswa, getSoal, getTes, searchSiswa } from "../graphql/query";
+import { getSiswa, getSoal, getTes, searchSiswa, searchSiswabyNIS } from "../graphql/query";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { addTes } from "../graphql/mutation";
 
 const TesKecerdasan = () => {    
     const navigate = useNavigate()
+    const [tanggal, setTanggal] = useState(new Date());
+    const [searchNis, setSearchNis] = useState('')
     const {data, loading, error} = useQuery(getSoal)
-    const {data:dataSiswa , loading:loadingSiswa, error:errorSiswa} = useQuery(searchSiswa)
+    // const {data:dataSiswa , loading:loadingSiswa, error:errorSiswa} = useQuery(searchSiswabyNIS)
+    const {data:dataSiswa , loading:loadingSiswa, error:errorSiswa} = useQuery(searchSiswabyNIS,{
+        variables:{eqNis: `${searchNis}`}
+    })
     const [soal, setSoal] = useState([])
     const [siswa, setSiswa] = useState([])
     const [selectedIntelligences, setSelectedIntelligences] = useState({});
@@ -19,19 +24,25 @@ const TesKecerdasan = () => {
     const [tes, setTes] = useState({
         nama:'',
         nis:"",
-        tglTes:'',
-        tipeKecerdasan:''
+        tglTes:tanggal.toISOString().substr(0, 10),
+        tipeKecerdasan:'',
+        prodi:''
     })
     useEffect(() => {
         if(!loading && !error){
             setSoal(data?.soal)
         }
-        if(!loadingSiswa && !errorSiswa){
+        if(!loadingSiswa && !errorSiswa && searchNis){
             setSiswa(dataSiswa?.siswa)
         }
         
-    }, [loading, loadingSiswa])
-
+    }, [loading, loadingSiswa, searchNis])
+    const firstSiswa = dataSiswa?.siswa[0];
+    useEffect(() => {
+        // Set nilai tanggal saat komponen dimuat
+        setTanggal(new Date());
+      }, []);
+    
     const [kinestetik, setKinestetik] = useState({})    
     const [linguistik, setLinguistik] = useState({})
     const [logis, setLogis] = useState({})
@@ -46,22 +57,58 @@ const TesKecerdasan = () => {
         
         if (tipe=='Kinestetik'){
             setKinestetik((prev)=>({...prev,[itemName]:isChecked}))
+            setTes(prev => ({
+                ...prev,
+                prodi: 'Kedokteran Gigi, Seni Tari, Kebidanan, Tata Busana, Ilmu Keolahragan, Ilmu Bedah'
+            }));
         }else if (tipe =="Linguistic Verbal"){
             setLinguistik((prev)=>({...prev,[itemName]:isChecked}))
+            setTes(prev => ({
+                ...prev,
+                prodi: 'Ilmu Komunikasi, Bahasa dan Sastra, Ilmu Hukum, Jurnalistik'
+            }));
         }else if (tipe =="Logis Matematis"){
             setLogis((prev)=>({...prev,[itemName]:isChecked}))
+            setTes(prev => ({
+                ...prev,
+                prodi: 'Akuntansi, Matematika, Statistika, Aktuaria, Teknik Informatika, Sistem Informasi, Ekonomi'
+            }));
         }else if (tipe =="Spasial Visual"){
             setSpasial((prev)=>({...prev,[itemName]:isChecked}))
+            setTes(prev => ({
+                ...prev,
+                prodi: 'Arsitektur, Seni Rupa, DKV< Teknik Sipil, Fotografi, Planologi'
+            }));
         }else if (tipe =="Ritmik Musikal"){
             setRitmik((prev)=>({...prev,[itemName]:isChecked}))
+            setTes(prev => ({
+                ...prev,
+                prodi: 'Seni Musik'
+            }));
         }else if (tipe =="Interpersonal"){
             setInterpersonal((prev)=>({...prev,[itemName]:isChecked}))
+            setTes(prev => ({
+                ...prev,
+                prodi: 'Ilmu Keperawatan, Kesehatan Masyarakat, PSikologi, PGSD'
+            }));
         }else if (tipe =="Intrapersonal"){
             setIntrapersonal((prev)=>({...prev,[itemName]:isChecked}))
+            setTes(prev => ({
+                ...prev,
+                prodi: 'Ilmu Agama, Administrasi Niaga'
+            }));
         }else if (tipe =="Naturalis"){
             setNaturalis((prev)=>({...prev,[itemName]:isChecked}))
+            setTes(prev => ({
+                ...prev,
+                prodi: 'Kedokteran Hewan, Peternakan, Perikanan, Pertanian, Kelautan, Kehutanan, Ilmu Biologi'
+            }));
         }else if (tipe =="Eksistensial"){
             setEksistensial((prev)=>({...prev,[itemName]:isChecked}))
+            setTes(prev => ({
+                ...prev,
+                prodi: 'Ilmu Filsafat, Ilmu Sejarah'
+            }));
         }
         const categoryCounts = {
             Kinestetik: Object.keys(kinestetik).filter(key => kinestetik[key]).length,
@@ -109,10 +156,11 @@ const TesKecerdasan = () => {
             await ADD_TES({
                 variables:{
                     object:{
-                        nis:tes.nis,
-                        nama:tes.nama,
+                        nis:searchNis,
+                        nama:firstSiswa?.nama,
                         tglTes:tes.tglTes,
-                        tipeKecerdasan:tes.tipeKecerdasan
+                        tipeKecerdasan:tes.tipeKecerdasan,
+                        prodi: tes.prodi
                     }
                 }
             })
@@ -120,9 +168,10 @@ const TesKecerdasan = () => {
              '/tipeKecerdasan',{
                  state:{
                      tipeKecerdasan : tes.tipeKecerdasan,
-                     nis:tes.nis,
-                     nama:tes.nama,
-                     tglTes:tes.tglTes
+                     nis:searchNis,
+                     nama:firstSiswa?.nama,
+                     tglTes:tes.tglTes,
+                     prodi:tes.prodi
                  }
              }
             )
@@ -154,23 +203,29 @@ const TesKecerdasan = () => {
                         <div className="mb-3">
                             <table>
                                 <tr>
-                                    <td><label className="text-white" htmlFor="">NIS</label></td>
+                                    <td ><label className="mb-2 text-white " htmlFor="">NIS</label></td>
                                     <td></td>
                                     <td>
-                                        {/* <input 
-                                        className="ms-3 form-control mb-2" 
+                                        <input 
+                                        className="ms-3 mb-2 form-control " 
                                         type="text" 
                                         name="nis" 
                                         id="nis" 
-                                        onChange={(e) => {
-                                            setTes((prev) => ({
-                                                ...prev,
-                                                nis : e.target.value,
-                                            }))
-                                        }}
-                                        value={tes.nis}
-                                    /> */}
-                                    <select 
+                                        value={searchNis}
+                                        onChange={(e)=>setSearchNis(e.target.value)}
+                                        // onChange={(e) => {
+                                        //     setTes((prev) => ({
+                                        //         ...prev,
+                                        //         nis : e.target.value,
+                                        //     }))
+                                        // }}
+                                        // value={tes.nis}
+                                    />
+                                    {!loadingSiswa && searchNis && dataSiswa?.siswa.length === 0 && (
+                                        <small className="text-danger">Siswa dengan NIS {searchNis} tidak ditemukan.</small>
+                                    )}
+
+                                    {/* <select 
                                         id={'nis'}  
                                         className={'form-control ms-3 mb-2 '}
                                         name={'nis'} 
@@ -195,19 +250,21 @@ const TesKecerdasan = () => {
                                                 </option>
                                             ))
                                         }
-                                    </select>                                    </td>
+                                    </select> */}
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td><label className="text-white" htmlFor="">Nama</label></td>
                                     <td></td>
                                     <td>
                                         <input 
-                                        className="ms-3 form-control mb-2" 
-                                        type="text" 
-                                        name="nama" 
-                                        id="nama"
-                                        value={tes.nama}
-                                    />
+                                            className="ms-3 form-control mb-2" 
+                                            type="text" 
+                                            name="nama" 
+                                            id="nama"
+                                            disabled
+                                            value={firstSiswa?.nama || ''}
+                                        /> 
                                     </td>
                                 </tr>
                                 <tr>
@@ -216,16 +273,17 @@ const TesKecerdasan = () => {
                                     <td>
                                         <input 
                                         className="ms-3 form-control" 
-                                        type="date" 
+                                        type="text" 
+                                        disabled
                                         name="tglTes" 
                                         id="tglTes" 
                                         onChange={(e) => {
                                             setTes((prev) => ({
                                                 ...prev,
-                                                tglTes : e.target.value,
+                                                tglTes :tanggal,
                                             }))
                                         }}
-                                        value={tes.tglTes}
+                                        value={tanggal.toISOString().substr(0, 10)}
                                     />
                                     </td>
                                 </tr>

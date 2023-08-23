@@ -27,6 +27,9 @@ const generatePDF = (data) => {
 
     doc.text("Data Soal", 10, 10)
     doc.autoTable(tableColumn, tableRows)
+    let currentDate = new Date();
+    let dateString = currentDate.toLocaleString();
+    doc.text(dateString, 140, 15);
     doc.save('data-soal.pdf')
 }
 

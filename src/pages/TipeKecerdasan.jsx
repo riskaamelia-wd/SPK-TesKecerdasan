@@ -19,10 +19,11 @@ export const TiperKecerdasan = () => {
                 link5={'/hasilTes'}
             />
             <div className="text-center" style={{backgroundColor:'var(--primary)', height:'100vh', paddingTop:'25vh'}}>
-                <apan className="text-white">NIS : {location.state.nis}</apan>
+                <p className="text-white">Tanggal Tes : {location.state.tglTes}</p>
+                <span className="text-white">NIS : {location.state.nis}</span>
                 <h4 className="text-white">{location.state.nama}</h4>
                 <h1 className="text-white">{location.state.tipeKecerdasan}</h1>
-                <p className="text-white">Tanggal Tes : {location.state.tglTes}</p>
+                <p className="text-white">Rekomendasi Program Studi : <br />{location.state.prodi}</p>
             </div>
         </>
     )

@@ -95,7 +95,7 @@ const Siswa = () => {
             }
         }
     })
-
+    
     const jurusan = [
         {value:'---', text:'pilih'},
         {value:'IPA', text:'IPA'},
@@ -153,170 +153,6 @@ const Siswa = () => {
                 <Judul 
                     text={'Data Siswa'}
                 />
-                <form onReset={formik.handleReset} onSubmit={formik.handleSubmit}>
-                    <div className="row col-12 mb-4">
-                        <div  style={{backgroundColor:'var(--secondary)'}} className="rounded p-3 col-7 col-lg-5 m-auto">
-                            <table >
-                                <tr>
-                                    <td><label>NIS</label></td>
-                                    <td></td>
-                                    <td className="col-10">
-                                        <input
-                                            type={'text'}                
-                                            name={'nis'}
-                                            value = {formik.values.nis}
-                                            onChange = {formik.handleChange}
-                                            className ={`form-control`}
-                                            id={'nis'}
-                                        />
-                                    </td>
-                                    <td>
-                                    {formik.errors.nis ? <div className='text-danger fw-light '>{formik.errors.nis}</div> : null}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><label>Nama</label></td>
-                                    <td></td>
-                                    <td>
-                                        <input
-                                            type={'text'}                
-                                            name={'nama'}
-                                            value = {formik.values.nama}
-                                            onChange = {formik.handleChange}
-                                            className ={`form-control`}
-                                            id={'nama'}
-                                        />
-                                    </td>
-                                    <td>
-                                    {formik.errors.nama ? <div className='text-danger fw-light '>{formik.errors.nama}</div> : null}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><label>Tanggal Lahir</label></td>
-                                    <td></td>
-                                    <td>
-                                        <input
-                                            type={'date'}                
-                                            name={'tglLahir'}
-                                            id={'tglLahir'}
-                                            value = {formik.values.tglLahir}
-                                            onChange = {formik.handleChange}
-                                            className ={`form-control`}
-                                        />
-                                    </td>
-                                    <td>
-                                    {formik.errors.tglLahir ? <div className='text-danger fw-light '>{formik.errors.tglLahir}</div> : null}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><label>No.Hp</label></td>
-                                    <td></td>
-                                    <td>
-                                        <input
-                                            type={'number'}                
-                                            name={'noHp'}
-                                            id={'noHp'}
-                                            value = {formik.values.noHp}
-                                            onChange = {formik.handleChange}
-                                            className ={`form-control`}
-                                        />
-                                    </td>
-                                    <td>
-                                    {formik.errors.noHp ? <div className='text-danger fw-light '>{formik.errors.noHp}</div> : null}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><label>Jenis Kelamin</label></td>
-                                    <td></td>
-                                    <td>
-                                        <select
-                                            id="jenKel"
-                                            className="form-control"
-                                            name="jenKel"
-                                            onChange={formik.handleChange}
-                                        >
-                                            {/* { */}
-                                                <option value={'---'}>pilih</option>
-                                                <option value={'Laki-laki'}>Laki-laki</option>
-                                                <option value={'Perempuan'}>Perempuan</option>
-                                            {/* } */}
-                                        </select>
-                                    </td>
-                                    <td>
-                                    {formik.errors.jenKel ? <div className='text-danger fw-light '>{formik.errors.jenKel}</div> : null}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><label>Jurusan</label></td>
-                                    <td></td>
-                                    <td>
-                                        <select
-                                            id="jurusan"
-                                            className="form-control"
-                                            name="jurusan"
-                                            onChange = {formik.handleChange}
-                                        >
-                                            {
-                                                jurusan?.map(option => (
-                                                    <option
-                                                        value={option.value}
-                                                        key={option.value}
-                                                    >
-                                                        {option.text}
-                                                    </option>
-                                                ))
-                                            }
-                                        </select>
-                                    </td>
-                                    <td>
-                                    {formik.errors.jurusan ? <div className='text-danger fw-light '>{formik.errors.jurusan}</div> : null}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><label>Kelas</label></td>
-                                    <td></td>
-                                    <td>
-                                        <select
-                                            id="kelas"
-                                            className="form-control"
-                                            name="kelas"
-                                            onChange = {formik.handleChange}
-                                        >
-                                            {
-                                                kelas?.map(option => (
-                                                    <option
-                                                        value={option.value}
-                                                        key={option.value}
-                                                    >
-                                                        {option.text}
-                                                    </option>
-                                                ))
-                                            }
-                                        </select>
-                                    </td>
-                                    <td>
-                                    {formik.errors.kelas ? <div className='text-danger fw-light '>{formik.errors.kelas}</div> : null}
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
-                        <div className="col-3 col-lg-2 ms-lg-1 m-auto rounded" style={{backgroundColor:'var(--secondary)', height:'fit-content'}}>
-                            <div className="col-10 m-auto d-flex flex-column">
-                                <Button
-                                    className={'mb-3 mt-3'}
-                                    type={'submit'}
-                                    text={'Simpan'}
-                                />
-                                <Button
-                                    className={'mb-3'}
-                                    type={'reset'}
-                                    onClick={ e => formik.resetForm()}
-                                    text={'Batal'}
-                                />
-                            </div>
-                        </div>
-                    </div>
-                </form>
                 {/* <div  className="mb-3 mt-2 col-6 ">
                     <div style={{backgroundColor:'var(--secondary)'}} className="col-lg-5 col-12 m-auto p-1 pe-3 rounded">                        
                         <Cari
@@ -331,6 +167,171 @@ const Siswa = () => {
                     </div>
                 </div> */}
                 <div className="col-11 m-auto mt-3">
+                    
+                <form onReset={formik.handleReset} onSubmit={formik.handleSubmit}>
+                    <div className="row col-12 mb-4">
+                        <div className="col-11 col-lg-7 d-flex flex-row jutidy-content-between">
+                            <div  style={{backgroundColor:'var(--secondary)'}}  className="col-9 me-2 p-3 rounded">
+                                <table >
+                                    <tr>
+                                        <td><label>NIS</label></td>
+                                        <td></td>
+                                        <td className="col-10">
+                                            <input
+                                                type={'text'}                
+                                                name={'nis'}
+                                                value = {formik.values.nis}
+                                                onChange = {formik.handleChange}
+                                                className ={`form-control`}
+                                                id={'nis'}
+                                            />
+                                        </td>
+                                        <td>
+                                        {formik.errors.nis ? <div className='text-danger fw-light '>{formik.errors.nis}</div> : null}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><label>Nama</label></td>
+                                        <td></td>
+                                        <td>
+                                            <input
+                                                type={'text'}                
+                                                name={'nama'}
+                                                value = {formik.values.nama}
+                                                onChange = {formik.handleChange}
+                                                className ={`form-control`}
+                                                id={'nama'}
+                                            />
+                                        </td>
+                                        <td>
+                                        {formik.errors.nama ? <div className='text-danger fw-light '>{formik.errors.nama}</div> : null}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><label>Tanggal Lahir</label></td>
+                                        <td></td>
+                                        <td>
+                                            <input
+                                                type={'date'}                
+                                                name={'tglLahir'}
+                                                id={'tglLahir'}
+                                                value = {formik.values.tglLahir}
+                                                onChange = {formik.handleChange}
+                                                className ={`form-control`}
+                                            />
+                                        </td>
+                                        <td>
+                                        {formik.errors.tglLahir ? <div className='text-danger fw-light '>{formik.errors.tglLahir}</div> : null}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><label>No.Hp</label></td>
+                                        <td></td>
+                                        <td>
+                                            <input
+                                                type={'number'}                
+                                                name={'noHp'}
+                                                id={'noHp'}
+                                                value = {formik.values.noHp}
+                                                onChange = {formik.handleChange}
+                                                className ={`form-control`}
+                                            />
+                                        </td>
+                                        <td>
+                                        {formik.errors.noHp ? <div className='text-danger fw-light '>{formik.errors.noHp}</div> : null}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><label>Jenis Kelamin</label></td>
+                                        <td></td>
+                                        <td>
+                                            <select
+                                                id="jenKel"
+                                                className="form-control"
+                                                name="jenKel"
+                                                onChange={formik.handleChange}
+                                            >
+                                                {/* { */}
+                                                    <option value={'---'}>pilih</option>
+                                                    <option value={'Laki-laki'}>Laki-laki</option>
+                                                    <option value={'Perempuan'}>Perempuan</option>
+                                                {/* } */}
+                                            </select>
+                                        </td>
+                                        <td>
+                                        {formik.errors.jenKel ? <div className='text-danger fw-light '>{formik.errors.jenKel}</div> : null}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><label>Jurusan</label></td>
+                                        <td></td>
+                                        <td>
+                                            <select
+                                                id="jurusan"
+                                                className="form-control"
+                                                name="jurusan"
+                                                onChange = {formik.handleChange}
+                                            >
+                                                {
+                                                    jurusan?.map(option => (
+                                                        <option
+                                                            value={option.value}
+                                                            key={option.value}
+                                                        >
+                                                            {option.text}
+                                                        </option>
+                                                    ))
+                                                }
+                                            </select>
+                                        </td>
+                                        <td>
+                                        {formik.errors.jurusan ? <div className='text-danger fw-light '>{formik.errors.jurusan}</div> : null}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><label>Kelas</label></td>
+                                        <td></td>
+                                        <td>
+                                            <select
+                                                id="kelas"
+                                                className="form-control"
+                                                name="kelas"
+                                                onChange = {formik.handleChange}
+                                            >
+                                                {
+                                                    kelas?.map(option => (
+                                                        <option
+                                                            value={option.value}
+                                                            key={option.value}
+                                                        >
+                                                            {option.text}
+                                                        </option>
+                                                    ))
+                                                }
+                                            </select>
+                                        </td>
+                                        <td>
+                                        {formik.errors.kelas ? <div className='text-danger fw-light '>{formik.errors.kelas}</div> : null}
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div className="ms-4 rounded d-flex flex-column col-2" style={{height:'fit-content'}}>
+                                <Button
+                                    className={'mb-3 mt-3'}
+                                    type={'submit'}
+                                    text={'Simpan'}
+                                />
+                                <Button
+                                    className={'mb-3'}
+                                    type={'reset'}
+                                    onClick={ e => formik.resetForm()}
+                                    text={'Batal'}
+                                />
+                            </div>
+                        </div>                        
+                    </div>
+                </form>
                     <Cari
                         type={'text'}
                         classNameLabel={'text-white'}
@@ -341,7 +342,7 @@ const Siswa = () => {
                         onClick={handleSeacrh}
                         onChange={(e)=>setSearch(e.target.value)}
                         />
-                    <table className="table table-striped">
+                    <table className="table table-striped mt-2">
                         <thead>
                             <tr>
                                 <th>ID</th>

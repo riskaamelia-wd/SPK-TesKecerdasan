@@ -29,13 +29,19 @@ export const searchSiswa = gql`
         }
     }
 `
+export const searchSiswabyNIS = gql`
+  query MyQuery($eqNis: String = "") {
+    siswa(where: {nis: {_eq: $eqNis}}) {
+      nama
+      nis
+    }
+  }
+`
 
 export const getTes = gql`
     query MyQuery($nama: String = "%%") {
         tes(where: {nama: {_ilike: $nama}}) {
-          siswa {
-            jurusan
-          }
+          prodi
           nis
           nama
           id

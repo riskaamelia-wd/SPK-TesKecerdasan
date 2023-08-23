@@ -92,9 +92,7 @@ export const addTes = gql`
           nis
           tglTes
           tipeKecerdasan
-          siswa {
-            jurusan
-          }
+          prodi
         }
       }
 `

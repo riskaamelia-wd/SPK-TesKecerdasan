@@ -31,6 +31,9 @@ const generatePDF = (data) => {
 
     doc.text("Data Siswa", 14, 15)
     doc.autoTable(tableColumn, tableRows, {startY:20})
+    let currentDate = new Date();
+    let dateString = currentDate.toLocaleString();
+    doc.text(dateString, 140, 15);
     doc.save('data-siswa.pdf')
 }
 
@@ -47,7 +50,7 @@ export const DataSiswa = () => {
         }
     }, [loading])
 
-    const [DELETE_SISWA] = useMutation(deleteSiswa, {refetchQueries:[{getSiswa}]})
+    const [DELETE_SISWA] = useMutation(deleteSiswa, {refetchQueries:[getSiswa]})
 
     const handleDelete = async (item) => {
         console.log(item);
@@ -109,8 +112,8 @@ export const DataSiswa = () => {
                         </thead>
                         <tbody>
                             {                        
-                                data?.siswa?.map((item, idx) => 
-                                    <tr key={idx}>
+                                data?.siswa?.map((item) => 
+                                    <tr key={item.id}>
                                         <td>{item?.id}</td>
                                         <td>{item?.nis}</td>
                                         <td>{item?.nama}</td>
@@ -121,7 +124,7 @@ export const DataSiswa = () => {
                                         <td>{item.kelas}</td>
                                         <td>            
                                             <button className="bg-danger pb-2 m-0 rounded btn"
-                                            onClick={() => {handleDelete(item.id)}}
+                                            onClick={() => {handleDelete(item?.id)}}
                                             >
                                                 <img src={trash} alt="delete"/>
                                             </button>

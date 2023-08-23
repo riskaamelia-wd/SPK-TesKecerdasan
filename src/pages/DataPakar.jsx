@@ -31,6 +31,9 @@ const generatePDF = (data) => {
 
     doc.text("Data Pakar", 14, 15)
     doc.autoTable(tableColumn, tableRows, {startY:20})
+    let currentDate = new Date();
+    let dateString = currentDate.toLocaleString();
+    doc.text(dateString, 140, 15);
     doc.save('data-pakar.pdf')
 }
 
@@ -163,10 +166,10 @@ export const DataPakar = () => {
                 />
                 <div className="col-11 m-auto">
                     <div className="col-12 ">
-                        <form className="col-12  d-flex flex-row justify-content-between" onSubmit={handleSubmit}>
-                            <div className="col-6">  
-                                <div className="col-12 d-flex flex-row mb-3">
-                                    <label className=" me-5 text-white col-2">ID Pakar</label>
+                        <form className="col-12  d-flex flex-row" onSubmit={handleSubmit}>
+                            <div className="col-6 p-3 rounded" style={{backgroundColor:'var(--secondary)'}} >  
+                                <div className="col-12 d-flex flex-row mb-3" >
+                                    <label className=" me-5 col-2">ID Pakar</label>
                                     {
                                         <input 
                                             disabled 
@@ -188,10 +191,10 @@ export const DataPakar = () => {
                                         }))
                                     }}
                                     value={dataPakar.nama}
-                                    classNameLabel=" me-5 text-white  col-2"
+                                    classNameLabel=" me-5 col-2"
                                 />
                                 <div className="d-flex flex-row mb-3">
-                                    <label className=" me-5  col-2 text-white">Jenis Kelamin</label>
+                                    <label className=" me-5  col-2">Jenis Kelamin</label>
                                     <select
                                         id="jenKel"
                                         className="form-control"
@@ -210,7 +213,7 @@ export const DataPakar = () => {
                                     </select>
                                 </div>
                                 <Input
-                                    classNameLabel=" me-5  col-2 text-white"
+                                    classNameLabel=" me-5  col-2"
                                     text={'Telp'}
                                     type={'text'}
                                     name={'telp'}
@@ -224,8 +227,8 @@ export const DataPakar = () => {
                                     value={dataPakar.telp}
                                 />
                             </div>
-                            <div className="col-3 ">
-                                <div className="d-flex flex-column" style={{width:'fit-content'}}>
+                            <div className="">
+                                <div className="d-flex flex-column ms-5" style={{width:'fit-content'}}>
                                     <Button
                                         text={'Tambah'}
                                         type={'submit'}
@@ -240,7 +243,7 @@ export const DataPakar = () => {
                             </div>
                         </form>                  
                     </div>                
-                    <div style={{backgroundColor:'var(--secondary)', width:'fit-content'}} className="p-1 pe-3 mt-3 mb-4 rounded">
+                    <div style={{width:'fit-content'}} className="text-white mt-4 mb-3 rounded">
                             <Cari
                                 text={'Nama'}
                                 type={'text'}

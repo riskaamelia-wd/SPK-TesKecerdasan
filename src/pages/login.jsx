@@ -42,7 +42,8 @@ const Login = () => {
     });
 
     return (
-        <div className='col-12 d-flex' style={{height:'100vh',  backgroundImage:`url(${bg})`}}>
+        <div className='col-12 d-flex' style={{height:'100vh',  backgroundImage:`url(${bg})`, backgroundRepeat: 'no-repeat',
+        backgroundSize: 'cover'}}>
             <div className='col-6 col-lg-4 m-auto rounded' style={{backgroundColor:'var(--secondary)'}}>
                 <div className='mb-3 col-6 col-lg-4 m-auto'>
                     <img  src={sma} alt="SMA" />

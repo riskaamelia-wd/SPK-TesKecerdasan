@@ -9,6 +9,7 @@ import { Navbar } from "../components/Navbar"
 import { deleteSiswa } from "../graphql/mutation"
 import jsPDF from "jspdf";
 import "jspdf-autotable";
+import moment from "moment/moment"
 
 const generatePDF = (data) => {  
     const doc = new jsPDF();
@@ -30,10 +31,10 @@ const generatePDF = (data) => {
     });
 
     doc.text("Data Siswa", 14, 15)
+    doc.setFontSize(8);
+    let dateString = moment().format('LL')
+    doc.text(dateString, 170, 15);
     doc.autoTable(tableColumn, tableRows, {startY:20})
-    let currentDate = new Date();
-    let dateString = currentDate.toLocaleString();
-    doc.text(dateString, 140, 15);
     doc.save('data-siswa.pdf')
 }
 
@@ -49,7 +50,6 @@ export const DataSiswa = () => {
             setSiswa(data?.siswa)
         }
     }, [loading, data?.siswa])
-console.log(data);
     const [DELETE_SISWA] = useMutation(deleteSiswa, {refetchQueries:[searchSiswa]})
 
     const handleDelete = async (item) => {
@@ -84,7 +84,7 @@ console.log(data);
                 link4={'/dataHasil'}
                 linkMenu={'/menuAdmin'}
             />
-            <div style={{backgroundColor:'var(--primary)', height:'100vh'}}>
+            <div className="pb-3" style={{backgroundColor:'var(--primary)', height:'fit-content'}}>
                 <Judul text={'Data Siswa'}/>
             <div className="col-11 m-auto mt-5">
                     <Cari

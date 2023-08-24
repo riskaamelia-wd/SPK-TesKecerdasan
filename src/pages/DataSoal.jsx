@@ -10,6 +10,7 @@ import { Navbar } from "../components/Navbar"
 import { addSoal, deleteSoal } from "../graphql/mutation"
 import jsPDF from "jspdf";
 import "jspdf-autotable";
+import moment from "moment"
 
 const generatePDF = (data) => {  
     const doc = new jsPDF();
@@ -26,12 +27,14 @@ const generatePDF = (data) => {
     });
 
     doc.text("Data Soal", 10, 10)
+    doc.setFontSize(8);
+    let dateString = moment().format('LL')
+    doc.text(dateString, 170, 15);
     doc.autoTable(tableColumn, tableRows)
-    let currentDate = new Date();
-    let dateString = currentDate.toLocaleString();
-    doc.text(dateString, 140, 15);
     doc.save('data-soal.pdf')
 }
+
+
 
 export const DataSoal = () => {
     const {data, loading, error} = useQuery(getSoal)

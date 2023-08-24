@@ -31,7 +31,7 @@ const Pakar = () => {
                 link4={'/tesKecerdasan'}
                 link5={'/hasilTes'}
             />
-            <div className="pb-4" style={{backgroundColor:'var(--primary)', height:'fit-content'}}>
+            <div className="pb-4" style={{backgroundColor:'var(--primary)', height:'100vh'}}>
                 <Judul
                     text={'Pakar'}
                 />

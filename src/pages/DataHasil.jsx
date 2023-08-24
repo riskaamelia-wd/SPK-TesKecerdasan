@@ -27,10 +27,10 @@ const generatePDF = (data) => {
     });
 
     doc.text("Data Hasil", 14, 15)
+    doc.setFontSize(8);
+    let dateString = moment().format('LL')
+    doc.text(dateString, 170, 15);
     doc.autoTable(tableColumn, tableRows, {startY:20})
-    let currentDate = new Date();
-    let dateString = currentDate.toLocaleString();
-    doc.text(dateString, 140, 15);
     doc.save('data-hasil.pdf')
 }
 

@@ -71,7 +71,6 @@ export const DataSoal = () => {
             tipeKecerdasan : '',
             soal: ''
         })
-        window.location.reload()
     }
 
     const handleDelete = async (item) => {
@@ -82,7 +81,6 @@ export const DataSoal = () => {
                 }
             });
             alert("Item deleted successfully");
-            window.location.reload()
         } catch (error) {
             alert("Error deleting item:", error);
         }

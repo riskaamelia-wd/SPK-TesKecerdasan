@@ -64,42 +64,58 @@ const Siswa = () => {
         }
     }, [loading, data?.siswa])
 
-    const [add] = useMutation(addSiswa,{
+    const [ADD_SISWA] = useMutation(addSiswa,{
         refetchQueries:[{query:searchSiswa}]
     })
+    // const [DELETE_SISWA] = useMutation(deleteSiswa, 
+    //     {refetchQueries:[{searchSiswa}]
+    // })
+    const [DELETE_SISWA] = useMutation(deleteSiswa, {refetchQueries:[searchSiswa]})
 
-    const formik = useFormik({
-        initialValues:{
-            nis:'',
-            nama:'',
-            tglLahir:'',
-            noHp:'',
-            jenKel:'',
-            jurusan:'',
-            kelas:''
-        },
-        validate,
-        onSubmit:async values => {
-            if(values.nama !== '', values.nis !== '', values.tglLahir !== '', values.noHp !== '',values.jenKel !== '', values.jurusan !== '', values.kelas !== '' ){
-                // dispatch(addSiswaGlobal(values))
-                await add({
-                    variables:{
-                        object: {
-                            nis:values.nis,
-                            nama:values.nama,
-                            tglLahir:values.tglLahir,
-                            noHp:values.noHp,
-                            jenKel:values.jenKel,
-                            jurusan:values.jurusan,
-                            kelas:values.kelas,
-                        }
-                    }
-                })
-                alert('Add Data Successfully')
-                // window.location.reload()
-            }
-        }
+
+    const [values, setDataSiswa] = useState({
+        nis:'',
+        nama:'',
+        tglLahir:'',
+        noHp:'',
+        jenKel:'',
+        jurusan:'',
+        kelas:''
     })
+
+
+    // const formik = useFormik({
+    //     initialValues:{
+    //         nis:'',
+    //         nama:'',
+    //         tglLahir:'',
+    //         noHp:'',
+    //         jenKel:'',
+    //         jurusan:'',
+    //         kelas:''
+    //     },
+    //     validate,
+    //     onSubmit:async values => {
+    //         if(values.nama !== '', values.nis !== '', values.tglLahir !== '', values.noHp !== '',values.jenKel !== '', values.jurusan !== '', values.kelas !== '' ){
+    //             // dispatch(addSiswaGlobal(values))
+    //             await ADD_SISWA({
+    //                 variables:{
+    //                     object: {
+    //                         nis:values.nis,
+    //                         nama:values.nama,
+    //                         tglLahir:values.tglLahir,
+    //                         noHp:values.noHp,
+    //                         jenKel:values.jenKel,
+    //                         jurusan:values.jurusan,
+    //                         kelas:values.kelas,
+    //                     }
+    //                 }
+    //             })
+    //             alert('Add Data Successfully')
+    //             // window.location.reload()
+    //         }
+    //     }
+    // })
     
     const jurusan = [
         {value:'---', text:'pilih'},
@@ -116,10 +132,38 @@ const Siswa = () => {
     ]
 
     
-    const [DELETE_SISWA] = useMutation(deleteSiswa, {refetchQueries:[{searchSiswa}]})
+    const handleSubmit = async (e)  => {
+        e.preventDefault()
+        if(values.nama !== '', values.nis !== '', values.tglLahir !== '', values.noHp !== '',values.jenKel !== '', values.jurusan !== '', values.kelas !== ''){
+            await ADD_SISWA({
+                variables:{
+                    object : {
+                        nis:values.nis,
+                        nama:values.nama,
+                        tglLahir:values.tglLahir,
+                        noHp:values.noHp,
+                        jenKel:values.jenKel,
+                        jurusan:values.jurusan,
+                        kelas:values.kelas,
+                    }
+                }
+            })
+            // dispatch(addPakarGlobal(dataPakar))
+            alert("Data added successfully");
+        }
+        setDataSiswa({
+            nama : '',
+            nis:'',
+            tglLahir:'',
+            noHp:'',
+            jenKel:'',
+            jurusan:'',
+            kelas:'',
+        })
+        // window.location.reload()
+    }
 
     const handleDelete = async (item) => {
-        console.log(item);
         try {
             await DELETE_SISWA({
                 variables: {
@@ -173,7 +217,10 @@ const Siswa = () => {
                 </div> */}
                 <div className="col-11 m-auto mt-3">
                     
-                <form onReset={formik.handleReset} onSubmit={formik.handleSubmit}>
+                <form 
+                    onSubmit={handleSubmit}
+                    // onReset={formik.handleReset} onSubmit={formik.handleSubmit}
+                >
                     <div className="row col-12 mb-4">
                         <div className="col-11 col-lg-7 d-flex flex-row jutidy-content-between">
                             <div  style={{backgroundColor:'var(--secondary)'}}  className="col-9 me-2 p-3 rounded">
@@ -185,15 +232,21 @@ const Siswa = () => {
                                             <input
                                                 type={'text'}                
                                                 name={'nis'}
-                                                value = {formik.values.nis}
-                                                onChange = {formik.handleChange}
+                                                value = {values.nis}
+                                                // onChange = {formik.handleChange}
+                                                onChange={(e) => {
+                                                    setDataSiswa((prev) => ({
+                                                        ...prev,
+                                                        nis : e.target.value,
+                                                    }))
+                                                }}
                                                 className ={`form-control`}
                                                 id={'nis'}
                                             />
                                         </td>
-                                        <td>
+                                        {/* <td>
                                         {formik.errors.nis ? <div className='text-danger fw-light '>{formik.errors.nis}</div> : null}
-                                        </td>
+                                        </td> */}
                                     </tr>
                                     <tr>
                                         <td><label>Nama</label></td>
@@ -202,14 +255,16 @@ const Siswa = () => {
                                             <input
                                                 type={'text'}                
                                                 name={'nama'}
-                                                value = {formik.values.nama}
-                                                onChange = {formik.handleChange}
+                                                value = {values.nama}
+                                                onChange={(e) => {
+                                                    setDataSiswa((prev) => ({
+                                                        ...prev,
+                                                        nama : e.target.value,
+                                                    }))
+                                                }}
                                                 className ={`form-control`}
                                                 id={'nama'}
                                             />
-                                        </td>
-                                        <td>
-                                        {formik.errors.nama ? <div className='text-danger fw-light '>{formik.errors.nama}</div> : null}
                                         </td>
                                     </tr>
                                     <tr>
@@ -220,13 +275,15 @@ const Siswa = () => {
                                                 type={'date'}                
                                                 name={'tglLahir'}
                                                 id={'tglLahir'}
-                                                value = {formik.values.tglLahir}
-                                                onChange = {formik.handleChange}
+                                                value = {values.tglLahir}
+                                                onChange={(e) => {
+                                                    setDataSiswa((prev) => ({
+                                                        ...prev,
+                                                        tglLahir : e.target.value,
+                                                    }))
+                                                }}
                                                 className ={`form-control`}
                                             />
-                                        </td>
-                                        <td>
-                                        {formik.errors.tglLahir ? <div className='text-danger fw-light '>{formik.errors.tglLahir}</div> : null}
                                         </td>
                                     </tr>
                                     <tr>
@@ -237,13 +294,15 @@ const Siswa = () => {
                                                 type={'text'}                
                                                 name={'noHp'}
                                                 id={'noHp'}
-                                                value = {formik.values.noHp}
-                                                onChange = {formik.handleChange}
+                                                value = {values.noHp}
+                                                onChange={(e) => {
+                                                    setDataSiswa((prev) => ({
+                                                        ...prev,
+                                                        noHp : e.target.value,
+                                                    }))
+                                                }}
                                                 className ={`form-control`}
                                             />
-                                        </td>
-                                        <td>
-                                        {formik.errors.noHp ? <div className='text-danger fw-light '>{formik.errors.noHp}</div> : null}
                                         </td>
                                     </tr>
                                     <tr>
@@ -254,7 +313,12 @@ const Siswa = () => {
                                                 id="jenKel"
                                                 className="form-control"
                                                 name="jenKel"
-                                                onChange={formik.handleChange}
+                                                onChange={(e) => {
+                                                    setDataSiswa((prev) => ({
+                                                        ...prev,
+                                                        jenKel : e.target.value,
+                                                    }))
+                                                }}
                                             >
                                                 {/* { */}
                                                     <option value={'---'}>pilih</option>
@@ -262,9 +326,6 @@ const Siswa = () => {
                                                     <option value={'Perempuan'}>Perempuan</option>
                                                 {/* } */}
                                             </select>
-                                        </td>
-                                        <td>
-                                        {formik.errors.jenKel ? <div className='text-danger fw-light '>{formik.errors.jenKel}</div> : null}
                                         </td>
                                     </tr>
                                     <tr>
@@ -275,7 +336,12 @@ const Siswa = () => {
                                                 id="jurusan"
                                                 className="form-control"
                                                 name="jurusan"
-                                                onChange = {formik.handleChange}
+                                                onChange={(e) => {
+                                                    setDataSiswa((prev) => ({
+                                                        ...prev,
+                                                        jurusan : e.target.value,
+                                                    }))
+                                                }}
                                             >
                                                 {
                                                     jurusan?.map(option => (
@@ -289,9 +355,6 @@ const Siswa = () => {
                                                 }
                                             </select>
                                         </td>
-                                        <td>
-                                        {formik.errors.jurusan ? <div className='text-danger fw-light '>{formik.errors.jurusan}</div> : null}
-                                        </td>
                                     </tr>
                                     <tr>
                                         <td><label>Kelas</label></td>
@@ -301,7 +364,12 @@ const Siswa = () => {
                                                 id="kelas"
                                                 className="form-control"
                                                 name="kelas"
-                                                onChange = {formik.handleChange}
+                                                onChange={(e) => {
+                                                    setDataSiswa((prev) => ({
+                                                        ...prev,
+                                                        kelas : e.target.value,
+                                                    }))
+                                                }}
                                             >
                                                 {
                                                     kelas?.map(option => (
@@ -314,9 +382,6 @@ const Siswa = () => {
                                                     ))
                                                 }
                                             </select>
-                                        </td>
-                                        <td>
-                                        {formik.errors.kelas ? <div className='text-danger fw-light '>{formik.errors.kelas}</div> : null}
                                         </td>
                                     </tr>
                                 </table>
@@ -369,7 +434,7 @@ const Siswa = () => {
                             //    </tr>
                             //    : 
                             
-                               siswa?.map((item, idx) => 
+                               data?.siswa?.map((item, idx) => 
                                 // <p>{item.nis}</p>
                                     <tr key={idx}>
                                         <td>{item?.id}</td>

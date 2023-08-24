@@ -39,18 +39,18 @@ const generatePDF = (data) => {
 
 export const DataSiswa = () => {
     const [searchText, setSearch] = useState('')
-    const {data, loading, error, refetch} = useQuery(searchSiswa,{
+    const {data, loading, error} = useQuery(searchSiswa,{
         variables:{nis: `%${searchText}%`}
     })
     const [siswa, setSiswa] = useState([])
     const reportData = data?.siswa;
     useEffect(() => {
         if(!loading && !error){
-            setSiswa(data.siswa)
+            setSiswa(data?.siswa)
         }
-    }, [loading])
-
-    const [DELETE_SISWA] = useMutation(deleteSiswa, {refetchQueries:[getSiswa]})
+    }, [loading, data?.siswa])
+console.log(data);
+    const [DELETE_SISWA] = useMutation(deleteSiswa, {refetchQueries:[searchSiswa]})
 
     const handleDelete = async (item) => {
         console.log(item);
@@ -61,16 +61,16 @@ export const DataSiswa = () => {
                 }
             });
             alert("Item deleted successfully");
-            window.location.reload()
+            // window.location.reload()
         } catch (error) {
             alert("Error deleting item:", error);
         }
     }
 
-    const handleSeacrh =(e) => {
-        e.preventDefault()
-        refetch({search:searchText})
-    }
+    // const handleSeacrh =(e) => {
+    //     e.preventDefault()
+    //     refetch({search:searchText})
+    // }
     return(
         <>
             <Navbar

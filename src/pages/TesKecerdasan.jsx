@@ -57,58 +57,58 @@ const TesKecerdasan = () => {
         
         if (tipe=='Kinestetik'){
             setKinestetik((prev)=>({...prev,[itemName]:isChecked}))
-            setTes(prev => ({
-                ...prev,
-                prodi: 'Kedokteran Gigi, Seni Tari, Kebidanan, Tata Busana, Ilmu Keolahragan, Ilmu Bedah'
-            }));
+            // setTes(prev => ({
+            //     ...prev,
+            //     prodi: 'Kedokteran Gigi, Seni Tari, Kebidanan, Tata Busana, Ilmu Keolahragan, Ilmu Bedah'
+            // }));
         }else if (tipe =="Linguistic Verbal"){
             setLinguistik((prev)=>({...prev,[itemName]:isChecked}))
-            setTes(prev => ({
-                ...prev,
-                prodi: 'Ilmu Komunikasi, Bahasa dan Sastra, Ilmu Hukum, Jurnalistik'
-            }));
+            // setTes(prev => ({
+            //     ...prev,
+            //     prodi: 'Ilmu Komunikasi, Bahasa dan Sastra, Ilmu Hukum, Jurnalistik'
+            // }));
         }else if (tipe =="Logis Matematis"){
             setLogis((prev)=>({...prev,[itemName]:isChecked}))
-            setTes(prev => ({
-                ...prev,
-                prodi: 'Akuntansi, Matematika, Statistika, Aktuaria, Teknik Informatika, Sistem Informasi, Ekonomi'
-            }));
+            // setTes(prev => ({
+            //     ...prev,
+            //     prodi: 'Akuntansi, Matematika, Statistika, Aktuaria, Teknik Informatika, Sistem Informasi, Ekonomi'
+            // }));
         }else if (tipe =="Spasial Visual"){
             setSpasial((prev)=>({...prev,[itemName]:isChecked}))
-            setTes(prev => ({
-                ...prev,
-                prodi: 'Arsitektur, Seni Rupa, DKV< Teknik Sipil, Fotografi, Planologi'
-            }));
+            // setTes(prev => ({
+            //     ...prev,
+            //     prodi: 'Arsitektur, Seni Rupa, DKV, Teknik Sipil, Fotografi, Planologi'
+            // }));
         }else if (tipe =="Ritmik Musikal"){
             setRitmik((prev)=>({...prev,[itemName]:isChecked}))
-            setTes(prev => ({
-                ...prev,
-                prodi: 'Seni Musik'
-            }));
+            // setTes(prev => ({
+            //     ...prev,
+            //     prodi: 'Seni Musik'
+            // }));
         }else if (tipe =="Interpersonal"){
             setInterpersonal((prev)=>({...prev,[itemName]:isChecked}))
-            setTes(prev => ({
-                ...prev,
-                prodi: 'Ilmu Keperawatan, Kesehatan Masyarakat, PSikologi, PGSD'
-            }));
+            // setTes(prev => ({
+            //     ...prev,
+            //     prodi: 'Ilmu Keperawatan, Kesehatan Masyarakat, PSikologi, PGSD'
+            // }));
         }else if (tipe =="Intrapersonal"){
             setIntrapersonal((prev)=>({...prev,[itemName]:isChecked}))
-            setTes(prev => ({
-                ...prev,
-                prodi: 'Ilmu Agama, Administrasi Niaga'
-            }));
+            // setTes(prev => ({
+            //     ...prev,
+            //     prodi: 'Ilmu Agama, Administrasi Niaga'
+            // }));
         }else if (tipe =="Naturalis"){
             setNaturalis((prev)=>({...prev,[itemName]:isChecked}))
-            setTes(prev => ({
-                ...prev,
-                prodi: 'Kedokteran Hewan, Peternakan, Perikanan, Pertanian, Kelautan, Kehutanan, Ilmu Biologi'
-            }));
+            // setTes(prev => ({
+            //     ...prev,
+            //     prodi: 'Kedokteran Hewan, Peternakan, Perikanan, Pertanian, Kelautan, Kehutanan, Ilmu Biologi'
+            // }));
         }else if (tipe =="Eksistensial"){
             setEksistensial((prev)=>({...prev,[itemName]:isChecked}))
-            setTes(prev => ({
-                ...prev,
-                prodi: 'Ilmu Filsafat, Ilmu Sejarah'
-            }));
+            // setTes(prev => ({
+            //     ...prev,
+            //     prodi: 'Ilmu Filsafat, Ilmu Sejarah'
+            // }));
         }
         const categoryCounts = {
             Kinestetik: Object.keys(kinestetik).filter(key => kinestetik[key]).length,
@@ -131,9 +131,31 @@ const TesKecerdasan = () => {
                 maxCategory = category;
             }
         });
+        let prodi = "";
+
+        if (maxCategory === "Kinestetik") {
+          prodi = "Kedokteran Gigi, Seni Tari, Kebidanan, Tata Busana, Ilmu Keolahragan, Ilmu Bedah";
+        } else if (maxCategory === "Linguistic Verbal") {
+          prodi = "Ilmu Komunikasi, Bahasa dan Sastra, Ilmu Hukum, Jurnalistik";
+        } else  if (maxCategory === "Logis Matematis") {
+            prodi = "Akuntansi, Matematika, Statistika, Aktuaria, Teknik Informatika, Sistem Informasi, Ekonomi";
+        } else if (maxCategory === "Spasial Visual") {
+            prodi = "Arsitektur, Seni Rupa, DKV, Teknik Sipil, Fotografi, Planologi";
+        } else  if (maxCategory === "Ritmik Musikal") {
+            prodi = "Seni Musik";
+        } else if (maxCategory === "Interpersonal") {
+            prodi = "Ilmu Keperawatan, Kesehatan Masyarakat, PSikologi, PGSD";
+        } else  if (maxCategory === "Intrapersonal") {
+            prodi = "Ilmu Agama, Administrasi Niaga";
+        } else if (maxCategory === "Naturalis") {
+            prodi = "Kedokteran Hewan, Peternakan, Perikanan, Pertanian, Kelautan, Kehutanan, Ilmu Biologi";
+        }else if(maxCategory === 'Eksistensial'){
+            prodi='Ilmu Filsafat, Ilmu Sejarah'
+        }
         setTes((prev) => ({
             ...prev,
-            tipeKecerdasan : maxCategory
+            tipeKecerdasan : maxCategory,
+            prodi:prodi
         }))
         
     };

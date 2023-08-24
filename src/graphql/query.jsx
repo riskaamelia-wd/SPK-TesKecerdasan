@@ -17,7 +17,7 @@ export const getSiswa = gql`
 
 export const searchSiswa = gql`
     query MyQuery($nis: String = "%%") {
-        siswa(where: {_or: {nis: {_ilike: $nis}}}) {
+        siswa(where: {nis: {_ilike: $nis}}) {
         id
         jenKel
         jurusan

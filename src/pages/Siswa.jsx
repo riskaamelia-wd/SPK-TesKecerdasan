@@ -11,6 +11,8 @@ import { getSiswa, searchSiswa } from "../graphql/query"
 import { useFormik } from "formik"
 import { useEffect, useState } from "react"
 import { Navbar } from "../components/Navbar"
+import { useDispatch, useSelector } from "react-redux"
+import { addSiswaGlobal } from "../redux/slice/siswaSlice"
 
 const validate = values => {
     const error = {}
@@ -48,6 +50,8 @@ const validate = values => {
 
 const Siswa = () => {    
     const navigate = useNavigate()
+    const dispatch = useDispatch
+    // const siswaGlobal = useSelector((state) => state.siswa.siswa)
     const [siswa, setSiswa] = useState([])
     const [searchText, setSearch] = useState('')
 
@@ -58,7 +62,7 @@ const Siswa = () => {
         if(!loading && !error){
             setSiswa(data.siswa)
         }
-    }, [loading])
+    }, [loading, data?.siswa])
 
     const [add] = useMutation(addSiswa,{
         refetchQueries:[{query:searchSiswa}]
@@ -77,6 +81,7 @@ const Siswa = () => {
         validate,
         onSubmit:async values => {
             if(values.nama !== '', values.nis !== '', values.tglLahir !== '', values.noHp !== '',values.jenKel !== '', values.jurusan !== '', values.kelas !== '' ){
+                // dispatch(addSiswaGlobal(values))
                 await add({
                     variables:{
                         object: {
@@ -91,7 +96,7 @@ const Siswa = () => {
                     }
                 })
                 alert('Add Data Successfully')
-                window.location.reload()
+                // window.location.reload()
             }
         }
     })
@@ -122,7 +127,7 @@ const Siswa = () => {
                 }
             });
             alert("Item deleted successfully");
-            window.location.reload()
+            // window.location.reload()
         } catch (error) {
             alert("Error deleting item:", error);
         }
@@ -229,7 +234,7 @@ const Siswa = () => {
                                         <td></td>
                                         <td>
                                             <input
-                                                type={'number'}                
+                                                type={'text'}                
                                                 name={'noHp'}
                                                 id={'noHp'}
                                                 value = {formik.values.noHp}

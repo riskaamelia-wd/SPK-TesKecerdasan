@@ -46,7 +46,7 @@ export const DataSoal = () => {
         if(!loading && !error){
             setSoal(data.siswa)
         }
-    }, [loading])
+    }, [loading, data?.soal])
 
     const [ADD_SOAL] = useMutation(addSoal, {refetchQueries:[getSoal]})
 

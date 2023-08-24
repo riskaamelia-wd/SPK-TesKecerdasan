@@ -13,6 +13,8 @@ import { addPakar, deletePakar, editPakar } from "../graphql/mutation";
 import { Navbar } from "../components/Navbar";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
+import { useDispatch, useSelector } from "react-redux";
+import { addPakarGlobal, deletePakarGlobal } from "../redux/slice/pakarSlice";
 
 const generatePDF = (data) => {  
     const doc = new jsPDF();
@@ -38,22 +40,25 @@ const generatePDF = (data) => {
 }
 
 export const DataPakar = () => {
+    const dispatch = useDispatch()
+    const pakarGlobal = useSelector((state) => state.pakar)
     const [searchText, setSearch] = useState('')
     const {data, loading, error} = useQuery(getPakar, {variables:{nama:`%${searchText}%`}})
     const [pakar,setPakar] = useState([])
     const reportData = data?.pakar;
+    const lastId = data?.pakar[data?.pakar.length - 1]?.id;
 
     const [dataPakar,setDataPakar] = useState({
+        // id:lastId+1,
         nama : '',
         jenKel: '',
         telp: ''
     })
-    const lastId = data?.pakar[data?.pakar.length - 1]?.id;
     useEffect(() => {
         if(!loading && !error){
             setPakar(data.pakar)
         }
-    }, [loading])
+    }, [loading, data?.pakar])
 
     const [ADD_PAKAR] = useMutation(addPakar,{
         refetchQueries:[getPakar]
@@ -78,14 +83,15 @@ export const DataPakar = () => {
                     }
                 }
             })
+            // dispatch(addPakarGlobal(dataPakar))
+            alert("Data added successfully");
         }
-        alert("Data added successfully");
         setDataPakar({
             nama : '',
             jenKel: '',
             telp: ''
         })
-        window.location.reload()
+        // window.location.reload()
     }
 
     const handleDelete = async (item) => {
@@ -96,8 +102,8 @@ export const DataPakar = () => {
                     id: item
                 }
             });
+            // dispatch(deletePakarGlobal(item))
             alert("Item deleted successfully");
-            window.location.reload()
         } catch (error) {
             alert("Error deleting item:", error);
         }
@@ -128,7 +134,7 @@ export const DataPakar = () => {
             }
         })
         alert('Data Edited Successfully');
-        window.location.reload()
+        // window.location.reload()
       };
     
       const handleCancelClick = (itemId) => {
@@ -146,7 +152,7 @@ export const DataPakar = () => {
       };
       
       
-
+    //   const combinedArray = pakar.concat(pakarGlobal);
     return(
         <>
             <Navbar
@@ -173,6 +179,9 @@ export const DataPakar = () => {
                                     {
                                         <input 
                                             disabled 
+                                            name="id"
+                                            type="number"
+                                            id="id"
                                             value={lastId + 1}
                                             className="form-control text-center" 
                                             style={{width:'5vw'}}

@@ -184,7 +184,7 @@ export const DataSoal = () => {
                                         <td>{item.id}</td>
                                         <td>{item.tipeKecerdasan}</td>
                                         <td>{item.soal}</td>
-                                        <td>                                        
+                                        <td> 
                                             <button className="bg-danger pb-2 m-0 rounded btn"
                                             onClick={() => {
                                                 handleDelete(item.id)}}

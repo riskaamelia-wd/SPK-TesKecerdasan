@@ -96,3 +96,18 @@ export const addTes = gql`
         }
       }
 `
+
+export const deleteTes = gql`
+    mutation MyMutation($id: Int = 0) {
+        delete_tes(where: {id: {_eq: $id}}) {
+        returning {
+            id
+            nama
+            nis
+            prodi
+            tglTes
+            tipeKecerdasan
+        }
+        }
+    }
+`

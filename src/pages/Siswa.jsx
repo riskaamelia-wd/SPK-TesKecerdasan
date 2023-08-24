@@ -163,6 +163,18 @@ const Siswa = () => {
         // window.location.reload()
     }
 
+    const handleBatal = () => {
+        setDataSiswa({
+            nama : '',
+            nis:'',
+            tglLahir:'',
+            noHp:'',
+            jenKel:'',
+            jurusan:'',
+            kelas:'',
+        })
+    }
+
     const handleDelete = async (item) => {
         try {
             await DELETE_SISWA({
@@ -395,7 +407,7 @@ const Siswa = () => {
                                 <Button
                                     className={'mb-3'}
                                     type={'reset'}
-                                    onClick={ e => formik.resetForm()}
+                                    onClick={ e => handleBatal()}
                                     text={'Batal'}
                                 />
                             </div>

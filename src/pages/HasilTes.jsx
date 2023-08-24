@@ -3,9 +3,11 @@ import Cari from "../components/Cari"
 import Button from "../elements/Button"
 import Judul from "../elements/Judul"
 import { Navbar } from "../components/Navbar"
-import { useQuery } from "@apollo/client"
+import { useMutation, useQuery } from "@apollo/client"
 import { getTes } from "../graphql/query"
 import { useEffect, useState } from "react"
+import trash from '../assets/trash.svg'
+import { deleteTes } from "../graphql/mutation"
 
 const HasilTes = () =>{
     // const {data, loading, error} = useQuery(getTes)
@@ -18,7 +20,22 @@ const HasilTes = () =>{
         if(!loading && !error){
             setHasil(data?.tes)
         }
-    },[loading])
+    },[loading, data?.tes])
+    const [DELETE_TES] = useMutation(deleteTes,{
+        refetchQueries:[getTes]
+    })
+    const handleDelete = async (item) => {
+        try {
+            await DELETE_TES({
+                variables: {
+                    id: item
+                }
+            });
+            alert("Item deleted successfully");
+        } catch (error) {
+            alert("Error deleting item:", error);
+        }
+    }
     return(
         <>
             <Navbar                
@@ -62,13 +79,14 @@ const HasilTes = () =>{
                                 <th>Nama</th>
                                 <th>Tes Kecerdasan</th>
                                 <th>Program Studi</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
                             {
                                 loading?
                                 <tr>
-                                    <td className="text-center" colSpan={'5'}>Loading...</td>
+                                    <td className="text-center" colSpan={'6'}>Loading...</td>
                                 </tr>
                                 :
                                 data?.tes?.map((item)=>
@@ -77,7 +95,14 @@ const HasilTes = () =>{
                                         <td>{item.tglTes}</td>
                                         <td>{item.nama}</td>
                                         <td>{item.tipeKecerdasan}</td>
-                                        <td>{item.prodi}</td>
+                                        <td>{item.prodi}</td><td> 
+                                            <button className="bg-danger pb-2 m-0 rounded btn"
+                                            onClick={() => {
+                                                handleDelete(item.id)}}
+                                            >
+                                                <img src={trash} alt="delete"/>
+                                            </button>
+                                        </td>
                                     </tr>
                                 )
                             }

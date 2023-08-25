@@ -8,6 +8,7 @@ import { useEffect, useState } from "react"
 import { Navbar } from "../components/Navbar"
 import jsPDF from "jspdf";
 import "jspdf-autotable";
+import moment from "moment"
 
 const generatePDF = (data) => {  
     const doc = new jsPDF();

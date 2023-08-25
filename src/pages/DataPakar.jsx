@@ -15,6 +15,7 @@ import jsPDF from "jspdf";
 import "jspdf-autotable";
 import { useDispatch, useSelector } from "react-redux";
 import { addPakarGlobal, deletePakarGlobal } from "../redux/slice/pakarSlice";
+import moment from "moment";
 
 const generatePDF = (data) => {  
     const doc = new jsPDF();
@@ -245,7 +246,7 @@ export const DataPakar = () => {
                                     <Button
                                         text={'Report'}
                                         className={'mt-3'}
-                                        onClick={() => generatePDF(reportData)}
+                                        onClick={() => generatePDF(data?.pakar)}
                                         type={'button'}
                                     />
                                 </div>
